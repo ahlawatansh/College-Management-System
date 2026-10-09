@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Management System</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-hover: #f1f5f9;
+      --input-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #7c3aed;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --primary: #7c3aed;
+      --primary-glow: rgba(124, 58, 237, 0.15);
+      --purple-bg: #f5f3ff;
+      --purple-border: #ddd6fe;
+      --purple-text: #6d28d9;
+      --primary-glow: rgba(124, 58, 237, 0.15);
+      --emerald: #059669;
+      --emerald-bg: #ecfdf5;
+      --emerald-border: #a7f3d0;
+      --blue-bg: #f5f3ff;
+      --blue-border: #ddd6fe;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
+      --font-mono: Consolas, "SF Mono", Menlo, Monaco, "Courier New", monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 60px;
+    }
+
+    /* Clean Top Header (Left Title, Right Minimalist Slider) */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-wrap h1 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    /* Minimalist Sliding Segment Switcher (Frameless, No Outer Cover, Smooth Slide) */
+    .nav-switcher {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      background: transparent; /* No outer cover */
+      border: none;             /* No outer cover border */
+      padding: 0;
+      gap: 0;
+    }
+
+    .nav-slider-indicator {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background: #f5f3ff; /* Soft light purple pill */
+      border: 1px solid #ddd6fe; /* Delicate hairline border */
+      border-radius: var(--radius-pill);
+      transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1), width 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 1;
+      pointer-events: none;
+      box-shadow: 0 1px 4px rgba(124, 58, 237, 0.08);
+    }
+
+    .nav-switcher-btn {
+      position: relative;
+      z-index: 2;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 8px 22px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-switcher-btn:hover {
+      color: var(--text);
+    }
+
+    .nav-switcher-btn.active {
+      color: #6d28d9;
+      font-weight: 600;
+    }
+
+    /* Smooth page slide & fade transitions between views */
+    @keyframes viewFadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .view-container {
+      animation: viewFadeSlide 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Sub Navigation Menu Bar - Full Height Rectangle Tabs, Flush with Upper & Bottom Borders */
+    .sub-menu {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 0;
+      height: 52px;
+      box-sizing: border-box;
+      overflow-x: auto;
+    }
+
+    .sub-tab-btn {
+      font-family: inherit;
+      background: transparent;
+      border: none;
+      border-radius: 0; /* Proper rectangle: no circular / pill radius */
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 0 24px;
+      height: 100%; /* Full height touching upper and bottom of menu bar */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.16s ease, color 0.16s ease, border-bottom 0.16s ease;
+      white-space: nowrap;
+      position: relative;
+      border-bottom: 3px solid transparent;
+      box-sizing: border-box;
+    }
+
+    .sub-tab-btn:hover {
+      color: var(--text);
+      background: #f1f5f9; /* Light grey whitish as before */
+      border-radius: 0;
+    }
+
+    .sub-tab-btn.active {
+      color: #6d28d9;
+      background: #f5f3ff; /* Proper full-height rectangle light purple active */
+      font-weight: 600;
+      border-bottom: 3px solid #7c3aed; /* Light purple indicator flush with bottom */
+      border-radius: 0;
+    }
+
+    .sub-tab-btn.active:hover {
+      color: #6d28d9;
+      background: #ede9fe; /* Subtle purple hover when active */
+    }
+
+    /* Filter pills for nested tables and queries */
+    .filter-tab-btn {
+      font-family: inherit;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .filter-tab-btn:hover {
+      color: var(--text);
+      background: #f1f5f9; /* Light grey whitish as before */
+    }
+
+    .filter-tab-btn.active {
+      color: #6d28d9;
+      background: #f5f3ff;
+      border-color: #ddd6fe;
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1320px;
+      margin: 28px auto 0 auto;
+      padding: 0 28px;
+    }
+
+    /* Single Container Metrics Bar Separated by Vertical Lines */
+    .metrics-bar {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 16px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .metric-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 5px;
+      padding: 0 10px;
+    }
+
+    .metric-divider {
+      width: 1px;
+      height: 52px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-hint {
+      font-size: 11px;
+      color: #059669;
+      font-weight: 500;
+    }
+
+    /* General Curvy Card Layout */
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Clean Pill Badges */
+    .pill-badge {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      display: inline-block;
+    }
+
+    .pill-blue, .pill-purple { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+    .pill-green { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+    .pill-amber { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+    .pill-purple { background: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+    .pill-gray { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+    /* Primary Key (P.K) and Foreign Key (F.K) Badges */
+    .key-tag {
+      display: inline-block;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1.5px 5.5px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .pk-tag {
+      background: #f5f3ff;
+      color: #7c3aed;
+      border: 1px solid #ddd6fe;
+    }
+    .fk-tag {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* 16 Queries Dedicated Pill Styling and Spacing */
+    .query-pills-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+
+    .query-btn {
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      user-select: none;
+    }
+
+    .query-btn:hover {
+      color: #6d28d9;
+      background: #f5f3ff;
+      border-color: #ddd6fe;
+      transform: translateY(-1px);
+    }
+
+    .query-btn.active {
+      background: #7c3aed;
+      color: #ffffff;
+      border-color: #7c3aed;
+      box-shadow: 0 3px 10px rgba(124, 58, 237, 0.25);
+      font-weight: 700;
+      transform: translateY(-1px);
+    }
+
+    /* TABLES: FIXED WIDTH, NO HORIZONTAL SCROLLING, WRAP TEXT */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .table-wrap {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    table {
+      width: 100%;
+      table-layout: auto;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      font-size: 11.5px;
+      letter-spacing: 0.02em;
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      line-height: 1.3;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    td {
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border);
+      color: #1e293b;
+      white-space: nowrap;
+      line-height: 1.35;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .pk-cell {
+      font-weight: 800 !important;
+      color: #0f172a !important;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+
+    /* Forms & Curvy Inputs with Generous Right Padding */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .form-input {
+      font-family: inherit;
+      font-size: 13.5px;
+      padding: 11px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      color: var(--text);
+      outline: none;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .form-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* Select Dropdowns with Outside Chevron Arrow */
+    select.form-input {
+      padding: 11px 42px 11px 16px;
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #ffffff;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px 16px;
+      cursor: pointer;
+    }
+
+    select.form-input:invalid,
+    select.form-input option[value=""] {
+      color: #94a3b8;
+    }
+
+    /* Curvy Pill Buttons */
+    .btn {
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: #7c3aed;
+      color: white;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .btn-emerald {
+      background: #059669;
+      color: white;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
+    }
+
+    .btn-subtle {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .btn-subtle:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* VS CODE THEME CODE VIEWER (Dark Background, Colorful Syntax) */
+    .vscode-box {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid #333333;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .log-item {
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    /* 100% Width & Tall SQL Terminal */
+    .sql-terminal-wrap {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .sql-textarea {
+      width: 100%;
+      height: 260px;
+      min-height: 220px;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      padding: 16px 20px;
+      border: 1px solid #333333;
+      border-radius: var(--radius-md);
+      background: #1e1e1e;
+      color: #9cdcfe;
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+      transition: all 0.2s ease;
+    }
+
+    .sql-textarea:focus {
+      border-color: #569cd6;
+      box-shadow: 0 0 0 3px rgba(86, 156, 214, 0.25);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 14px 24px;
+      border-radius: var(--radius-pill);
+      color: white;
+      font-size: 13px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Split Grid */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .metrics-bar { flex-wrap: wrap; }
+      .split-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 12px 16px; }
+      .sub-menu { padding: 0 10px; justify-content: flex-start; height: 48px; }
+      .sub-menu .sub-tab-btn { padding: 0 14px; font-size: 12.5px; }
+      .container { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header (Left: Title, Right: Minimalist Slider) -->
+  <header>
+    <div class="brand-wrap">
+      <h1>College Management System</h1>
+    </div>
+
+    <!-- Minimalist Sliding Segment Switcher on the Right Side (Frameless, Smooth Slide) -->
+    <div class="nav-switcher">
+      <div class="nav-slider-indicator" id="navSliderThumb"></div>
+      <button id="btnSwitchDash" class="nav-switcher-btn active" onclick="switchView('management')">
+        College Management
+      </button>
+      <button id="btnSwitchDb" class="nav-switcher-btn" onclick="switchView('database')">
+        Database Operations
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- SEGMENT 1: COLLEGE MANAGEMENT (The Complete Institutional Platform)   -->
+  <!-- ===================================================================== -->
+  <div id="view-management" class="view-container">
+    
+    <!-- Centered Sub-Navigation Menu Bar -->
+    <nav class="sub-menu">
+      <button class="sub-tab-btn active" onclick="switchMgmtTab('students')">Students & Admissions</button>
+      <button class="sub-tab-btn" onclick="switchMgmtTab('faculty')">Faculty & Departments</button>
+      <button class="sub-tab-btn" onclick="switchMgmtTab('courses')">Curriculum & Offerings</button>
+      <button class="sub-tab-btn" onclick="switchMgmtTab('enrollments')">Course Registrations</button>
+      <button class="sub-tab-btn" onclick="switchMgmtTab('exams')">Examinations & Grading</button>
+      <button class="sub-tab-btn" onclick="switchMgmtTab('fees')">Fee Payments</button>
+    </nav>
+
+    <div class="container">
+
+      <!-- Metrics Bar: Single Row / Container Separated by Vertical Lines -->
+      <div class="metrics-bar">
+        <div class="metric-item">
+          <div class="stat-label">Enrolled Students</div>
+          <div class="stat-value" id="statStudents">-</div>
+          <div class="stat-hint">Active Student Body</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="stat-label">Faculty Members</div>
+          <div class="stat-value" id="statFaculty">-</div>
+          <div class="stat-hint">Academic Instructors</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="stat-label">Departments</div>
+          <div class="stat-value" id="statDepts">-</div>
+          <div class="stat-hint">Academic Branches</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="stat-label">Courses Catalog</div>
+          <div class="stat-value" id="statCourses">-</div>
+          <div class="stat-hint">Curriculum Subjects</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="stat-label">Course Sections</div>
+          <div class="stat-value" id="statOfferings">-</div>
+          <div class="stat-hint">Active Term Offerings</div>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <div class="stat-label">Fee Revenue</div>
+          <div class="stat-value" id="statFees">-</div>
+          <div class="stat-hint">Total Dues Remitted</div>
+        </div>
+      </div>
+
+      <!-- MGMT TAB 1: STUDENTS & ADMISSIONS -->
+      <div id="mgmt-students" class="mgmt-pane">
+        
+        <!-- Student Directory Card -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Student Directory</div>
+              <div class="card-subtitle">Manage student enrollments, academic status, and departmental allocations</div>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <input type="text" id="studentSearch" class="form-input" style="width: 240px; padding: 9px 16px;" placeholder="Search students..." oninput="filterStudentsTable()">
+              <button class="btn btn-subtle" onclick="loadMetadata()">Refresh</button>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 14%;">Reg No</th>
+                    <th style="width: 18%;">Name</th>
+                    <th style="width: 16%;">Department</th>
+                    <th style="width: 10%;">Semester</th>
+                    <th style="width: 18%;">Email</th>
+                    <th style="width: 14%;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="studentDirectoryBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Admission & Lookup Grid -->
+        <div class="split-grid">
+          
+          <!-- Admission Form -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Student Admission Form</div>
+                <div class="card-subtitle">Register new student record into institutional database</div>
+              </div>
+            </div>
+            <form onsubmit="handleStudentAdmission(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Registration Number</label>
+                  <input type="text" id="admRegNo" class="form-input" placeholder="e.g. REG_13" required>
+                </div>
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" id="admFirstName" class="form-input" placeholder="Student" required>
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" id="admLastName" class="form-input" placeholder="13" required>
+                </div>
+                <div class="form-group">
+                  <label>Email Address</label>
+                  <input type="email" id="admEmail" class="form-input" placeholder="student13@college.edu" required>
+                </div>
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <input type="text" id="admPhone" class="form-input" placeholder="9811000113" required>
+                </div>
+                <div class="form-group">
+                  <label>Date of Birth</label>
+                  <input type="date" id="admDob" class="form-input" value="2005-01-15" required>
+                </div>
+                <div class="form-group">
+                  <label>Gender</label>
+                  <select id="admGender" class="form-input">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Department</label>
+                  <select id="admDept" class="form-input" required></select>
+                </div>
+                <div class="form-group">
+                  <label>Current Semester</label>
+                  <input type="number" id="admSemester" class="form-input" min="1" max="8" value="1" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Admit Student</button>
+            </form>
+          </div>
+
+          <!-- Academic & Fee Lookup -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Student Profile & Dues Lookup</div>
+                <div class="card-subtitle">Examine student GPA, earned credits, and tuition fee dues</div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label>Select Student</label>
+              <select id="lookupStudentSelect" class="form-input" onchange="runStudentLookup()"></select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;" id="lookupResultBox">
+              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Cumulative GPA</div>
+                <div style="font-size: 24px; font-weight: 800; color: #7c3aed; margin-top: 4px;" id="lookupGpa">--</div>
+              </div>
+              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Earned Credits</div>
+                <div style="font-size: 24px; font-weight: 800; color: var(--text); margin-top: 4px;" id="lookupCredits">--</div>
+              </div>
+              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Total Fees Paid</div>
+                <div style="font-size: 20px; font-weight: 800; color: #059669; margin-top: 4px;" id="lookupPaid">--</div>
+              </div>
+              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Pending Dues</div>
+                <div style="font-size: 20px; font-weight: 800; color: #d97706; margin-top: 4px;" id="lookupDues">--</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- MGMT TAB 2: FACULTY & DEPARTMENTS -->
+      <div id="mgmt-faculty" class="mgmt-pane" style="display: none;">
+        
+        <!-- Faculty Directory Card -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Faculty Directory</div>
+              <div class="card-subtitle">Instructors, designations, and departmental affiliations</div>
+            </div>
+            <button class="btn btn-subtle" onclick="loadMetadata()">Refresh</button>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 16%;">Name</th>
+                    <th style="width: 18%;">Designation</th>
+                    <th style="width: 16%;">Department</th>
+                    <th style="width: 20%;">Email</th>
+                    <th style="width: 20%;">Salary</th>
+                  </tr>
+                </thead>
+                <tbody id="facultyDirectoryBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-grid">
+          
+          <!-- Appoint Faculty Form -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Appoint Faculty Member</div>
+                <div class="card-subtitle">Add faculty member into academic department</div>
+              </div>
+            </div>
+            <form onsubmit="handleFacultyAppointment(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" id="facFirstName" class="form-input" placeholder="Faculty" required>
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" id="facLastName" class="form-input" placeholder="11" required>
+                </div>
+                <div class="form-group">
+                  <label>Email Address</label>
+                  <input type="email" id="facEmail" class="form-input" placeholder="faculty11@college.edu" required>
+                </div>
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <input type="text" id="facPhone" class="form-input" placeholder="9800000111" required>
+                </div>
+                <div class="form-group">
+                  <label>Designation</label>
+                  <select id="facDesignation" class="form-input">
+                    <option value="Professor">Professor</option>
+                    <option value="Associate Professor">Associate Professor</option>
+                    <option value="Assistant Professor" selected>Assistant Professor</option>
+                    <option value="Lecturer">Lecturer</option>
+                    <option value="HOD">HOD</option>
+                    <option value="Dean">Dean</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Department</label>
+                  <select id="facDept" class="form-input" required></select>
+                </div>
+                <div class="form-group">
+                  <label>Monthly Salary</label>
+                  <input type="number" id="facSalary" class="form-input" min="25000" step="1000" value="85000" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Appoint Faculty</button>
+            </form>
+          </div>
+
+          <!-- Academic Departments List & Add -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Departments</div>
+                <div class="card-subtitle">Academic divisions, buildings, and budgets</div>
+              </div>
+            </div>
+            <div class="table-card" style="margin-bottom: 20px;">
+              <div class="table-wrap" style="max-height: 200px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 12%;">ID</th>
+                      <th style="width: 18%;">Code</th>
+                      <th style="width: 30%;">Name</th>
+                      <th style="width: 20%;">Building</th>
+                      <th style="width: 20%;">Budget</th>
+                    </tr>
+                  </thead>
+                  <tbody id="deptTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <form onsubmit="handleDepartmentCreation(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Department Code</label>
+                  <input type="text" id="deptCode" class="form-input" placeholder="e.g. DEP_11" required>
+                </div>
+                <div class="form-group">
+                  <label>Department Name</label>
+                  <input type="text" id="deptName" class="form-input" placeholder="e.g. Department 11" required>
+                </div>
+                <div class="form-group">
+                  <label>Building Block</label>
+                  <input type="text" id="deptBuilding" class="form-input" placeholder="e.g. Block I" required>
+                </div>
+                <div class="form-group">
+                  <label>Annual Budget</label>
+                  <input type="number" id="deptBudget" class="form-input" min="100000" value="2500000" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-emerald">Create Department</button>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- MGMT TAB 3: CURRICULUM & OFFERINGS -->
+      <div id="mgmt-courses" class="mgmt-pane" style="display: none;">
+        
+        <!-- Master Course Catalog -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Course Catalog</div>
+              <div class="card-subtitle">Courses, credit units, and academic levels</div>
+            </div>
+            <button class="btn btn-subtle" onclick="loadMetadata()">Refresh</button>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 18%;">Code</th>
+                    <th style="width: 26%;">Title</th>
+                    <th style="width: 14%;">Credits</th>
+                    <th style="width: 16%;">Level</th>
+                    <th style="width: 16%;">Department</th>
+                  </tr>
+                </thead>
+                <tbody id="courseCatalogBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-grid">
+          
+          <!-- Register New Course -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Register New Course</div>
+                <div class="card-subtitle">Add new course to curriculum catalog</div>
+              </div>
+            </div>
+            <form onsubmit="handleCourseCreation(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Course Code</label>
+                  <input type="text" id="crsCode" class="form-input" placeholder="e.g. CRS_11" required>
+                </div>
+                <div class="form-group">
+                  <label>Course Title</label>
+                  <input type="text" id="crsTitle" class="form-input" placeholder="e.g. Course 11" required>
+                </div>
+                <div class="form-group">
+                  <label>Credits</label>
+                  <input type="number" id="crsCredits" class="form-input" min="1" max="6" value="4" required>
+                </div>
+                <div class="form-group">
+                  <label>Department</label>
+                  <select id="crsDept" class="form-input" required></select>
+                </div>
+                <div class="form-group">
+                  <label>Level</label>
+                  <select id="crsLevel" class="form-input">
+                    <option value="Introductory">Introductory</option>
+                    <option value="Intermediate" selected>Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Elective">Elective</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Course</button>
+            </form>
+          </div>
+
+          <!-- Schedule Course Offering Section -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Schedule Course Offering</div>
+                <div class="card-subtitle">Assign faculty, classroom, and seat capacity to a term section</div>
+              </div>
+            </div>
+            <form onsubmit="handleOfferingScheduling(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Course</label>
+                  <select id="offCourse" class="form-input" required></select>
+                </div>
+                <div class="form-group">
+                  <label>Instructor</label>
+                  <select id="offFaculty" class="form-input" required></select>
+                </div>
+                <div class="form-group">
+                  <label>Academic Year</label>
+                  <input type="text" id="offYear" class="form-input" value="2025-2026" required>
+                </div>
+                <div class="form-group">
+                  <label>Semester</label>
+                  <input type="number" id="offSemester" class="form-input" min="1" max="8" value="4" required>
+                </div>
+                <div class="form-group">
+                  <label>Classroom</label>
+                  <input type="text" id="offRoom" class="form-input" value="Room 101" required>
+                </div>
+                <div class="form-group">
+                  <label>Seat Capacity</label>
+                  <input type="number" id="offCap" class="form-input" min="10" max="120" value="60" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-emerald">Schedule Section</button>
+            </form>
+          </div>
+
+        </div>
+
+        <!-- Scheduled Course Sections Table -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Active Scheduled Sections</div>
+              <div class="card-subtitle">Current seat utilization, room assignments, and instructors</div>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 16%;">Course</th>
+                    <th style="width: 18%;">Instructor</th>
+                    <th style="width: 16%;">Term</th>
+                    <th style="width: 14%;">Room</th>
+                    <th style="width: 12%;">Enrolled</th>
+                    <th style="width: 14%;">Seats Left</th>
+                  </tr>
+                </thead>
+                <tbody id="offeringsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MGMT TAB 4: COURSE REGISTRATIONS -->
+      <div id="mgmt-enrollments" class="mgmt-pane" style="display: none;">
+        
+        <!-- Enroll Student Form Card -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Course Registration</div>
+              <div class="card-subtitle">Register student into course section with automated capacity checks</div>
+            </div>
+          </div>
+          <form onsubmit="handleCourseEnrollment(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Select Student</label>
+                <select id="enrStudent" class="form-input" required></select>
+              </div>
+              <div class="form-group">
+                <label>Select Course Offering Section</label>
+                <select id="enrOffering" class="form-input" required></select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Enroll Student</button>
+          </form>
+        </div>
+
+        <!-- Active Registrations Table -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Course Registrations Ledger</div>
+              <div class="card-subtitle">Master list of student course enrollments</div>
+            </div>
+            <button class="btn btn-subtle" onclick="loadMetadata()">Refresh</button>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 16%;">Reg No</th>
+                    <th style="width: 20%;">Student Name</th>
+                    <th style="width: 18%;">Course</th>
+                    <th style="width: 18%;">Instructor</th>
+                    <th style="width: 18%;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="enrollmentsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MGMT TAB 5: EXAMINATIONS & GRADING -->
+      <div id="mgmt-exams" class="mgmt-pane" style="display: none;">
+        
+        <!-- Record Exam Marks Form -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Enter Examination Grade</div>
+              <div class="card-subtitle">Record exam marks (0-100) with automatic grade evaluation</div>
+            </div>
+          </div>
+          <form onsubmit="handleExamGrading(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Select Course Enrollment</label>
+                <select id="examEnrollment" class="form-input" required></select>
+              </div>
+              <div class="form-group">
+                <label>Marks Scored (0 - 100)</label>
+                <input type="number" id="examMarks" class="form-input" min="0" max="100" step="0.5" placeholder="e.g. 88.5" required>
+              </div>
+              <div class="form-group">
+                <label>Remarks</label>
+                <input type="text" id="examRemarks" class="form-input" value="Regular Examination" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Record Marks</button>
+          </form>
+        </div>
+
+        <!-- Examination Results Gradebook -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Examination Gradebook</div>
+              <div class="card-subtitle">Official evaluation scores and letter grades</div>
+            </div>
+            <button class="btn btn-subtle" onclick="loadMetadata()">Refresh</button>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 14%;">Reg No</th>
+                    <th style="width: 18%;">Student Name</th>
+                    <th style="width: 18%;">Course</th>
+                    <th style="width: 12%;">Marks</th>
+                    <th style="width: 14%;">Grade</th>
+                    <th style="width: 14%;">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody id="examResultsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MGMT TAB 6: FEE PAYMENTS -->
+      <div id="mgmt-fees" class="mgmt-pane" style="display: none;">
+        
+        <div class="split-grid">
+          
+          <!-- Process Fee Payment Form -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Record Fee Payment</div>
+                <div class="card-subtitle">Process fee remittance with transaction receipt</div>
+              </div>
+            </div>
+            <form onsubmit="handleFeePayment(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Select Student</label>
+                  <select id="feeStudent" class="form-input" required></select>
+                </div>
+                <div class="form-group">
+                  <label>Amount</label>
+                  <input type="number" id="feeAmount" class="form-input" min="1000" step="500" value="75000" required>
+                </div>
+                <div class="form-group">
+                  <label>Payment Method</label>
+                  <select id="feeMethod" class="form-input">
+                    <option value="UPI">UPI</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Debit Card">Debit Card</option>
+                    <option value="Net Banking">Net Banking</option>
+                    <option value="Cash">Cash</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Reference No (Optional)</label>
+                  <input type="text" id="feeRef" class="form-input" placeholder="e.g. TXN_16">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Process Payment</button>
+            </form>
+          </div>
+
+          <!-- Quick Dues Calculator Card -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Student Fee Balance Checker</div>
+                <div class="card-subtitle">Calculates pending dues for any student</div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label>Select Student</label>
+              <select id="duesCheckSelect" class="form-input" onchange="runDuesCheck()"></select>
+            </div>
+            <div style="background: #f8fafc; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="color: var(--text-muted);">Standard Semester Tuition:</span>
+                <strong>1,50,000.00</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="color: var(--text-muted);">Total Fees Paid:</span>
+                <strong style="color: #059669;" id="duesCheckPaid">--</strong>
+              </div>
+              <hr style="border: none; border-top: 1px solid var(--border); margin: 12px 0;">
+              <div style="display: flex; justify-content: space-between; font-size: 15px;">
+                <span style="font-weight: 700;">Remaining Balance Due:</span>
+                <strong style="color: #d97706;" id="duesCheckPending">--</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Master Fee Payments Ledger -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Fee Payments Ledger</div>
+              <div class="card-subtitle">Master transaction ledger for all tuition payments</div>
+            </div>
+            <button class="btn btn-subtle" onclick="loadMetadata()">Refresh</button>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 14%;">Reg No</th>
+                    <th style="width: 18%;">Student Name</th>
+                    <th style="width: 16%;">Amount</th>
+                    <th style="width: 14%;">Method</th>
+                    <th style="width: 16%;">Reference</th>
+                    <th style="width: 12%;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="feeLedgerBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- SEGMENT 2: DATABASE OPERATIONS (Inspector, Tables, Queries & Terminal)-->
+  <!-- ===================================================================== -->
+  <div id="view-database" class="view-container" style="display: none;">
+    
+    <!-- Centered Sub-Navigation Menu Bar (Diagrams Tab Removed) -->
+    <nav class="sub-menu">
+      <button class="sub-tab-btn active" onclick="switchDbTab('tables')">8 Database Tables</button>
+      <button class="sub-tab-btn" onclick="switchDbTab('tracer')">Real-time Query Tracer</button>
+      <button class="sub-tab-btn" onclick="switchDbTab('queries')">16 SQL Queries</button>
+      <button class="sub-tab-btn" onclick="switchDbTab('console')">Live SQL Console</button>
+      <button class="sub-tab-btn" onclick="switchDbTab('cursor')">Academic Audit (Cursor)</button>
+    </nav>
+
+    <div class="container">
+
+      <!-- DB Tab: 8 Tables -->
+      <div id="db-tables" class="db-pane">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Live Relational Tables</div>
+              <div class="card-subtitle">Examine rows, attributes, and constraints across all 8 tables</div>
+            </div>
+            <button class="btn btn-subtle" onclick="loadCurrentTable()">Refresh</button>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;">
+            <button class="filter-tab-btn active" onclick="selectTable('STUDENT', this)">STUDENT</button>
+            <button class="filter-tab-btn" onclick="selectTable('DEPARTMENT', this)">DEPARTMENT</button>
+            <button class="filter-tab-btn" onclick="selectTable('FACULTY', this)">FACULTY</button>
+            <button class="filter-tab-btn" onclick="selectTable('COURSE', this)">COURSE</button>
+            <button class="filter-tab-btn" onclick="selectTable('COURSE_OFFERING', this)">COURSE_OFFERING</button>
+            <button class="filter-tab-btn" onclick="selectTable('ENROLLMENT', this)">ENROLLMENT</button>
+            <button class="filter-tab-btn" onclick="selectTable('EXAM_RESULT', this)">EXAM_RESULT</button>
+            <button class="filter-tab-btn" onclick="selectTable('FEE_PAYMENT', this)">FEE_PAYMENT</button>
+          </div>
+
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead><tr id="tableHeaders"></tr></thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DB Tab: Real-Time Query Tracer -->
+      <div id="db-tracer" class="db-pane" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Real-Time Database Query Tracer</div>
+              <div class="card-subtitle">Live activity feed showing SQL operations, procedures, and execution timings</div>
+            </div>
+            <button class="btn btn-subtle" onclick="loadTelemetry()">Refresh Feed</button>
+          </div>
+          <div id="telemetryFeed"></div>
+        </div>
+      </div>
+
+      <!-- DB Tab: 16 Queries (VS Code Dark Theme Syntax) -->
+      <div id="db-queries" class="db-pane" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">16 SQL Analytical Queries</div>
+              <div class="card-subtitle">Standard analytical queries: Joins, Subqueries, Group By, and Aggregations</div>
+            </div>
+          </div>
+          <div class="query-pills-bar" id="queryPills"></div>
+          <div style="margin-top: 6px; margin-bottom: 20px;">
+            <div style="font-weight: 700; font-size: 14.5px; margin-bottom: 8px; color: #0f172a;" id="qTitle">Select a query above</div>
+            <div class="vscode-box" id="qSql">-- SQL query will appear here</div>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead><tr id="qHeaders"></tr></thead>
+                <tbody id="qBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DB Tab: Live SQL Console (VS Code Dark Style, 100% Full Width) -->
+      <div id="db-console" class="db-pane" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Interactive SQL Terminal</div>
+              <div class="card-subtitle">Execute raw SQL queries directly on the SQLite database engine</div>
+            </div>
+            <button class="btn btn-emerald" onclick="runRawSql()">Execute Query</button>
+          </div>
+          <div class="sql-terminal-wrap">
+            <textarea id="rawSql" class="sql-textarea" placeholder="SELECT * FROM STUDENT WHERE status = 'Active';"></textarea>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead><tr id="rawH"></tr></thead>
+                <tbody id="rawB"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DB Tab: Cursor -->
+      <div id="db-cursor" class="db-pane" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Academic Audit Report (Cursor)</div>
+              <div class="card-subtitle">Explicit cursor iteration evaluating Dean's List and academic standing</div>
+            </div>
+            <button class="btn btn-primary" onclick="loadAuditReport()">Run Audit</button>
+          </div>
+          <div style="display: flex; gap: 24px; margin-bottom: 18px; padding: 14px 20px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <div>Total Evaluated: <strong id="auditTotal">-</strong></div>
+            <div>Dean's List: <strong id="auditHonors" style="color: #7c3aed;">-</strong></div>
+            <div>First Class: <strong id="auditFirst" style="color: #059669;">-</strong></div>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 14%;">Reg No</th>
+                    <th style="width: 20%;">Student Name</th>
+                    <th style="width: 18%;">Department</th>
+                    <th style="width: 16%;">Average Score</th>
+                    <th style="width: 14%;">CGPA</th>
+                    <th style="width: 18%;">Academic Standing</th>
+                  </tr>
+                </thead>
+                <tbody id="auditBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let activeView = 'management';
+    let currentTable = 'STUDENT';
+    let metaCache = {};
+
+    function syncNavSlider() {
+      const thumb = document.getElementById('navSliderThumb');
+      const activeBtn = document.querySelector('.nav-switcher-btn.active');
+      if (thumb && activeBtn) {
+        thumb.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+        thumb.style.width = `${activeBtn.offsetWidth}px`;
+      }
+    }
+
+    function switchView(view) {
+      activeView = view;
+      const vMgmt = document.getElementById('view-management');
+      const vDb = document.getElementById('view-database');
+      const btnDash = document.getElementById('btnSwitchDash');
+      const btnDb = document.getElementById('btnSwitchDb');
+
+      if (view === 'management') {
+        vMgmt.style.display = 'block';
+        vDb.style.display = 'none';
+        btnDash.classList.add('active');
+        btnDb.classList.remove('active');
+        syncNavSlider();
+        loadStats();
+        loadMetadata();
+      } else {
+        vMgmt.style.display = 'none';
+        vDb.style.display = 'block';
+        btnDash.classList.remove('active');
+        btnDb.classList.add('active');
+        syncNavSlider();
+        loadCurrentTable();
+        loadTelemetry();
+        loadQueryPills();
+      }
+    }
+
+    function switchMgmtTab(tabId) {
+      document.querySelectorAll('#view-management .sub-tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      document.querySelectorAll('.mgmt-pane').forEach(p => p.style.display = 'none');
+      const target = document.getElementById('mgmt-' + tabId);
+      if (target) target.style.display = 'block';
+    }
+
+    function switchDbTab(tabId) {
+      document.querySelectorAll('#view-database .sub-tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      document.querySelectorAll('.db-pane').forEach(p => p.style.display = 'none');
+      const target = document.getElementById('db-' + tabId);
+      if (target) target.style.display = 'block';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // --- VS CODE SYNTAX HIGHLIGHTER ---
+    function formatVsCodeSql(sql) {
+      if (!sql) return '';
+      let s = sql.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      // Comments
+      s = s.replace(/(--[^\r\n]*)/g, '<span style="color: #6a9955; font-style: italic;">$1</span>');
+      // Strings
+      s = s.replace(/('([^'\\]|\\.)*')/g, '<span style="color: #ce9178;">$1</span>');
+      // Numbers
+      s = s.replace(/\b(\d+(\.\d+)?)\b/g, '<span style="color: #b5cea8;">$1</span>');
+      // Keywords
+      const keywords = [
+        'SELECT', 'FROM', 'WHERE', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 'FULL JOIN',
+        'GROUP BY', 'ORDER BY', 'HAVING', 'INSERT INTO', 'INSERT', 'UPDATE', 'DELETE',
+        'VALUES', 'SET', 'ON', 'AND', 'OR', 'NOT', 'AS', 'DESC', 'ASC', 'IN', 'IS', 'NULL',
+        'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'ROUND', 'COALESCE', 'DISTINCT', 'LIMIT',
+        'CASE', 'WHEN', 'THEN', 'ELSE', 'END', 'BETWEEN', 'LIKE', 'UNION', 'ALL', 'CREATE',
+        'TABLE', 'DROP', 'ALTER', 'CALL', 'PRAGMA'
+      ];
+      const kwRegex = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'gi');
+      s = s.replace(kwRegex, function(m) {
+        return '<span style="color: #569cd6; font-weight: 600;">' + m.toUpperCase() + '</span>';
+      });
+      // Tables
+      const tables = ['STUDENT', 'FACULTY', 'DEPARTMENT', 'COURSE', 'COURSE_OFFERING', 'ENROLLMENT', 'EXAM_RESULT', 'FEE_PAYMENT'];
+      const tblRegex = new RegExp('\\b(' + tables.join('|') + ')\\b', 'gi');
+      s = s.replace(tblRegex, function(m) {
+        return '<span style="color: #4ec9b0; font-weight: 600;">' + m.toUpperCase() + '</span>';
+      });
+      return s;
+    }
+
+    // --- DATA LOADERS ---
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const d = await res.json();
+        document.getElementById('statStudents').innerText = d.students;
+        document.getElementById('statFaculty').innerText = d.faculty;
+        document.getElementById('statDepts').innerText = d.departments;
+        document.getElementById('statCourses').innerText = d.courses;
+        document.getElementById('statOfferings').innerText = d.offerings;
+        document.getElementById('statFees').innerText = Number(d.total_fees).toLocaleString('en-IN');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function loadMetadata() {
+      try {
+        const res = await fetch('/api/meta');
+        metaCache = await res.json();
+        populateDropdowns();
+        renderStudentDirectory(metaCache.students || []);
+        renderFacultyDirectory(metaCache.faculty || []);
+        renderDepartmentsTable(metaCache.departments || []);
+        renderCourseCatalog(metaCache.courses || []);
+        renderOfferingsTable(metaCache.offerings || []);
+        renderEnrollmentsTable(metaCache.enrollments || []);
+        renderExamResults(metaCache.exam_results || []);
+        renderFeeLedger(metaCache.fee_payments || []);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function populateDropdowns() {
+      // Departments
+      const deptOpts = '<option value="" disabled selected>-- Select Department --</option>' + (metaCache.departments || []).map(d => `<option value="${d.dept_id}">${d.dept_name} (${d.dept_code})</option>`).join('');
+      const admDept = document.getElementById('admDept');
+      const facDept = document.getElementById('facDept');
+      const crsDept = document.getElementById('crsDept');
+      if (admDept) admDept.innerHTML = deptOpts;
+      if (facDept) facDept.innerHTML = deptOpts;
+      if (crsDept) crsDept.innerHTML = deptOpts;
+
+      // Students
+      const stdOpts = '<option value="" disabled selected>-- Select Student --</option>' + (metaCache.students || []).map(s => `<option value="${s.student_id}">${s.full_name} (${s.reg_no})</option>`).join('');
+      const enrStd = document.getElementById('enrStudent');
+      const feeStd = document.getElementById('feeStudent');
+      const lookStd = document.getElementById('lookupStudentSelect');
+      const duesStd = document.getElementById('duesCheckSelect');
+      if (enrStd) enrStd.innerHTML = stdOpts;
+      if (feeStd) feeStd.innerHTML = stdOpts;
+      if (lookStd) lookStd.innerHTML = stdOpts;
+      if (duesStd) duesStd.innerHTML = stdOpts;
+
+      // Offerings
+      const offOpts = '<option value="" disabled selected>-- Select Offering Section --</option>' + (metaCache.offerings || []).map(o => `<option value="${o.offering_id}">#${o.offering_id} ${o.course_code} - ${o.course_title} (Available: ${o.available_seats}/${o.max_capacity})</option>`).join('');
+      const enrOff = document.getElementById('enrOffering');
+      if (enrOff) enrOff.innerHTML = offOpts;
+
+      // Courses for scheduling offering
+      const crsOpts = '<option value="" disabled selected>-- Select Course --</option>' + (metaCache.courses || []).map(c => `<option value="${c.course_id}">${c.course_code} - ${c.course_title} (${c.credits} Credits)</option>`).join('');
+      const offCrs = document.getElementById('offCourse');
+      if (offCrs) offCrs.innerHTML = crsOpts;
+
+      // Faculty for scheduling offering
+      const facOpts = '<option value="" disabled selected>-- Select Instructor --</option>' + (metaCache.faculty || []).map(f => `<option value="${f.faculty_id}">${f.faculty_name} (${f.designation})</option>`).join('');
+      const offFac = document.getElementById('offFaculty');
+      if (offFac) offFac.innerHTML = facOpts;
+
+      // Enrollments for Exam Grading
+      const enrExamOpts = '<option value="" disabled selected>-- Select Course Enrollment --</option>' + (metaCache.enrollments || []).map(e => `<option value="${e.enrollment_id}">Enrollment #${e.enrollment_id}: ${e.student_name} (${e.reg_no}) - ${e.course_code}</option>`).join('');
+      const examEnr = document.getElementById('examEnrollment');
+      if (examEnr) examEnr.innerHTML = enrExamOpts;
+    }
+
+    function renderStudentDirectory(list) {
+      const b = document.getElementById('studentDirectoryBody');
+      if (!b) return;
+      b.innerHTML = list.map(s => `
+        <tr>
+          <td><strong>#${s.student_id}</strong></td>
+          <td><span class="pill-badge pill-blue">${s.reg_no}</span></td>
+          <td>${s.full_name}</td>
+          <td>${s.dept_name || s.dept_code}</td>
+          <td>Sem ${s.current_semester}</td>
+          <td>${s.email}</td>
+          <td><span class="pill-badge ${s.status === 'Active' ? 'pill-green' : 'pill-amber'}">${s.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function filterStudentsTable() {
+      const q = (document.getElementById('studentSearch').value || '').toLowerCase();
+      const rows = (metaCache.students || []).filter(s => 
+        s.full_name.toLowerCase().includes(q) ||
+        s.reg_no.toLowerCase().includes(q) ||
+        (s.dept_name && s.dept_name.toLowerCase().includes(q))
+      );
+      renderStudentDirectory(rows);
+    }
+
+    async function runStudentLookup() {
+      const sel = document.getElementById('lookupStudentSelect');
+      if (!sel || !sel.value) {
+        document.getElementById('lookupGpa').innerText = '--';
+        document.getElementById('lookupCredits').innerText = '--';
+        document.getElementById('lookupPaid').innerText = '--';
+        document.getElementById('lookupDues').innerText = '--';
+        return;
+      }
+      try {
+        const res = await fetch(`/api/students/${sel.value}/gpa_fees`);
+        const d = await res.json();
+        document.getElementById('lookupGpa').innerText = d.gpa.toFixed(2);
+        document.getElementById('lookupCredits').innerText = d.credits;
+        document.getElementById('lookupPaid').innerText = Number(d.total_paid).toLocaleString('en-IN');
+        document.getElementById('lookupDues').innerText = Number(d.pending_dues).toLocaleString('en-IN');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function runDuesCheck() {
+      const sel = document.getElementById('duesCheckSelect');
+      if (!sel || !sel.value) {
+        document.getElementById('duesCheckPaid').innerText = '--';
+        document.getElementById('duesCheckPending').innerText = '--';
+        return;
+      }
+      try {
+        const res = await fetch(`/api/students/${sel.value}/gpa_fees`);
+        const d = await res.json();
+        document.getElementById('duesCheckPaid').innerText = Number(d.total_paid).toLocaleString('en-IN');
+        document.getElementById('duesCheckPending').innerText = Number(d.pending_dues).toLocaleString('en-IN');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderFacultyDirectory(list) {
+      const b = document.getElementById('facultyDirectoryBody');
+      if (!b) return;
+      b.innerHTML = list.map(f => `
+        <tr>
+          <td><strong>#${f.faculty_id}</strong></td>
+          <td><strong>${f.faculty_name}</strong></td>
+          <td><span class="pill-badge pill-purple">${f.designation}</span></td>
+          <td>${f.dept_code}</td>
+          <td>${f.email}</td>
+          <td>${Number(f.salary).toLocaleString('en-IN')}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderDepartmentsTable(list) {
+      const b = document.getElementById('deptTableBody');
+      if (!b) return;
+      b.innerHTML = list.map(d => `
+        <tr>
+          <td><strong>#${d.dept_id}</strong></td>
+          <td><span class="pill-badge pill-blue">${d.dept_code}</span></td>
+          <td>${d.dept_name}</td>
+          <td>${d.building}</td>
+          <td>${Number(d.budget).toLocaleString('en-IN')}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderCourseCatalog(list) {
+      const b = document.getElementById('courseCatalogBody');
+      if (!b) return;
+      b.innerHTML = list.map(c => `
+        <tr>
+          <td><strong>#${c.course_id}</strong></td>
+          <td><span class="pill-badge pill-blue">${c.course_code}</span></td>
+          <td>${c.course_title}</td>
+          <td>${c.credits} Credits</td>
+          <td><span class="pill-badge pill-gray">${c.course_level}</span></td>
+          <td>${c.dept_name || c.dept_code}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderOfferingsTable(list) {
+      const b = document.getElementById('offeringsTableBody');
+      if (!b) return;
+      b.innerHTML = list.map(o => `
+        <tr>
+          <td><strong>#${o.offering_id}</strong></td>
+          <td><span class="pill-badge pill-blue">${o.course_code} - ${o.course_title}</span></td>
+          <td>${o.instructor}</td>
+          <td>${o.academic_year} Sem ${o.semester}</td>
+          <td>${o.classroom}</td>
+          <td>${o.current_enrolled} / ${o.max_capacity}</td>
+          <td><strong style="color: ${o.available_seats > 0 ? '#059669' : '#dc2626'};">${o.available_seats}</strong></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderEnrollmentsTable(list) {
+      const b = document.getElementById('enrollmentsTableBody');
+      if (!b) return;
+      b.innerHTML = list.map(e => `
+        <tr>
+          <td><strong>#${e.enrollment_id}</strong></td>
+          <td><span class="pill-badge pill-blue">${e.reg_no}</span></td>
+          <td>${e.student_name}</td>
+          <td>${e.course_code}</td>
+          <td>${e.instructor}</td>
+          <td><span class="pill-badge ${e.enrollment_status === 'Completed' ? 'pill-green' : 'pill-blue'}">${e.enrollment_status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderExamResults(list) {
+      const b = document.getElementById('examResultsBody');
+      if (!b) return;
+      b.innerHTML = list.map(r => `
+        <tr>
+          <td><strong>#${r.result_id}</strong></td>
+          <td><span class="pill-badge pill-blue">${r.reg_no}</span></td>
+          <td>${r.student_name}</td>
+          <td>${r.course_code}</td>
+          <td><strong>${r.marks_obtained}</strong></td>
+          <td><span class="pill-badge ${r.grade === 'S' || r.grade === 'A' ? 'pill-green' : r.grade === 'B' ? 'pill-blue' : 'pill-amber'}">Grade ${r.grade}</span></td>
+          <td>${r.remarks}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderFeeLedger(list) {
+      const b = document.getElementById('feeLedgerBody');
+      if (!b) return;
+      b.innerHTML = list.map(p => `
+        <tr>
+          <td><strong>#${p.payment_id}</strong></td>
+          <td><span class="pill-badge pill-blue">${p.reg_no}</span></td>
+          <td>${p.student_name}</td>
+          <td><strong>${Number(p.amount_paid).toLocaleString('en-IN')}</strong></td>
+          <td><span class="pill-badge pill-gray">${p.payment_method}</span></td>
+          <td><code>${p.transaction_ref || 'AUTO-REF'}</code></td>
+          <td><span class="pill-badge pill-green">${p.payment_status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // --- FORM SUBMISSION HANDLERS ---
+    async function handleStudentAdmission(e) {
+      e.preventDefault();
+      const payload = {
+        reg_no: document.getElementById('admRegNo').value.trim(),
+        first_name: document.getElementById('admFirstName').value.trim(),
+        last_name: document.getElementById('admLastName').value.trim(),
+        email: document.getElementById('admEmail').value.trim(),
+        phone: document.getElementById('admPhone').value.trim(),
+        dob: document.getElementById('admDob').value,
+        gender: document.getElementById('admGender').value,
+        dept_id: document.getElementById('admDept').value,
+        current_semester: document.getElementById('admSemester').value
+      };
+      try {
+        const res = await fetch('/api/students/add', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+          e.target.reset();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    async function handleFacultyAppointment(e) {
+      e.preventDefault();
+      const payload = {
+        first_name: document.getElementById('facFirstName').value.trim(),
+        last_name: document.getElementById('facLastName').value.trim(),
+        email: document.getElementById('facEmail').value.trim(),
+        phone: document.getElementById('facPhone').value.trim(),
+        designation: document.getElementById('facDesignation').value,
+        dept_id: document.getElementById('facDept').value,
+        salary: document.getElementById('facSalary').value
+      };
+      try {
+        const res = await fetch('/api/faculty/add', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+          e.target.reset();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    async function handleDepartmentCreation(e) {
+      e.preventDefault();
+      const payload = {
+        dept_code: document.getElementById('deptCode').value.trim(),
+        dept_name: document.getElementById('deptName').value.trim(),
+        building: document.getElementById('deptBuilding').value.trim(),
+        budget: document.getElementById('deptBudget').value
+      };
+      try {
+        const res = await fetch('/api/departments/add', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+          e.target.reset();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    async function handleCourseCreation(e) {
+      e.preventDefault();
+      const payload = {
+        course_code: document.getElementById('crsCode').value.trim(),
+        course_title: document.getElementById('crsTitle').value.trim(),
+        credits: document.getElementById('crsCredits').value,
+        dept_id: document.getElementById('crsDept').value,
+        course_level: document.getElementById('crsLevel').value
+      };
+      try {
+        const res = await fetch('/api/courses/add', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+          e.target.reset();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    async function handleOfferingScheduling(e) {
+      e.preventDefault();
+      const payload = {
+        course_id: document.getElementById('offCourse').value,
+        faculty_id: document.getElementById('offFaculty').value,
+        academic_year: document.getElementById('offYear').value.trim(),
+        semester: document.getElementById('offSemester').value,
+        classroom: document.getElementById('offRoom').value.trim(),
+        max_capacity: document.getElementById('offCap').value
+      };
+      try {
+        const res = await fetch('/api/offerings/add', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+          e.target.reset();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    async function handleCourseEnrollment(e) {
+      e.preventDefault();
+      const payload = {
+        student_id: document.getElementById('enrStudent').value,
+        offering_id: document.getElementById('enrOffering').value
+      };
+      try {
+        const res = await fetch('/api/enroll', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    async function handleExamGrading(e) {
+      e.preventDefault();
+      const payload = {
+        enrollment_id: document.getElementById('examEnrollment').value,
+        marks: document.getElementById('examMarks').value,
+        remarks: document.getElementById('examRemarks').value.trim()
+      };
+      try {
+        const res = await fetch('/api/exam/record', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    async function handleFeePayment(e) {
+      e.preventDefault();
+      const payload = {
+        student_id: document.getElementById('feeStudent').value,
+        amount: document.getElementById('feeAmount').value,
+        method: document.getElementById('feeMethod').value,
+        transaction_ref: document.getElementById('feeRef').value.trim() || undefined
+      };
+      try {
+        const res = await fetch('/api/fees/pay', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        showToast(d.message);
+        if (d.success) {
+          loadMetadata();
+          loadStats();
+        }
+      } catch (err) {
+        showToast('Error: ' + err);
+      }
+    }
+
+    // --- DATABASE MANAGEMENT LOGIC ---
+    function selectTable(tbl, btn) {
+      currentTable = tbl;
+      document.querySelectorAll('#db-tables .filter-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      loadCurrentTable();
+    }
+
+    const tableSchemaKeys = {
+      STUDENT: {
+        pk: ['student_id'],
+        fk: ['dept_id']
+      },
+      DEPARTMENT: {
+        pk: ['dept_id'],
+        fk: []
+      },
+      FACULTY: {
+        pk: ['faculty_id'],
+        fk: ['dept_id']
+      },
+      COURSE: {
+        pk: ['course_id'],
+        fk: ['dept_id']
+      },
+      COURSE_OFFERING: {
+        pk: ['offering_id'],
+        fk: ['course_id', 'faculty_id']
+      },
+      ENROLLMENT: {
+        pk: ['enrollment_id'],
+        fk: ['student_id', 'offering_id']
+      },
+      EXAM_RESULT: {
+        pk: ['result_id'],
+        fk: ['enrollment_id']
+      },
+      FEE_PAYMENT: {
+        pk: ['payment_id'],
+        fk: ['student_id']
+      }
+    };
+
+    function formatHeaderLabel(h) {
+      if (!h) return '';
+      const customLabels = {
+        student_id: 'Student<br>ID',
+        reg_no: 'Reg<br>No',
+        first_name: 'First<br>Name',
+        last_name: 'Last<br>Name',
+        email: 'Email',
+        phone: 'Phone',
+        date_of_birth: 'Date of<br>Birth',
+        gender: 'Gender',
+        admission_date: 'Admission<br>Date',
+        dept_id: 'Dept<br>ID',
+        dept_name: 'Department<br>Name',
+        dept_code: 'Dept<br>Code',
+        building: 'Building',
+        budget: 'Budget',
+        established_year: 'Established<br>Year',
+        faculty_id: 'Faculty<br>ID',
+        hire_date: 'Hire<br>Date',
+        designation: 'Designation',
+        salary: 'Salary',
+        course_id: 'Course<br>ID',
+        course_code: 'Course<br>Code',
+        course_title: 'Course<br>Title',
+        credits: 'Credits',
+        course_level: 'Course<br>Level',
+        offering_id: 'Offering<br>ID',
+        academic_year: 'Academic<br>Year',
+        semester: 'Semester',
+        current_semester: 'Current<br>Semester',
+        classroom: 'Classroom',
+        max_capacity: 'Max<br>Capacity',
+        current_enrolled: 'Current<br>Enrolled',
+        enrollment_id: 'Enrollment<br>ID',
+        enrollment_date: 'Enrollment<br>Date',
+        status: 'Status',
+        result_id: 'Result<br>ID',
+        marks_obtained: 'Marks<br>Obtained',
+        grade: 'Grade',
+        exam_date: 'Exam<br>Date',
+        remarks: 'Remarks',
+        payment_id: 'Payment<br>ID',
+        amount_paid: 'Amount<br>Paid',
+        payment_date: 'Payment<br>Date',
+        payment_method: 'Payment<br>Method',
+        transaction_ref: 'Transaction<br>Ref',
+        payment_status: 'Payment<br>Status',
+        full_name: 'Full<br>Name',
+        student_name: 'Student<br>Name',
+        faculty_name: 'Faculty<br>Name',
+        instructor: 'Instructor',
+        total_students: 'Total<br>Students',
+        average_score: 'Average<br>Score',
+        total_payroll: 'Total<br>Payroll',
+        standing: 'Academic<br>Standing'
+      };
+
+      const key = h.toLowerCase().trim();
+      if (customLabels[key]) {
+        return customLabels[key];
+      }
+
+      return h.split('_').map(w => {
+        const u = w.toUpperCase();
+        if (u === 'ID') return 'ID';
+        if (u === 'NO') return 'No';
+        if (u === 'REF') return 'Ref';
+        if (u === 'GPA') return 'GPA';
+        if (u === 'CGPA') return 'CGPA';
+        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+      }).join('<br>');
+    }
+
+    async function loadCurrentTable() {
+      try {
+        const res = await fetch(`/api/tables/${currentTable}`);
+        const d = await res.json();
+        const trH = document.getElementById('tableHeaders');
+        const trB = document.getElementById('tableBody');
+        const tblKeys = tableSchemaKeys[currentTable] || { pk: [], fk: [] };
+
+        trH.innerHTML = (d.headers || []).map(h => {
+          const colLower = h.toLowerCase();
+          const isPk = tblKeys.pk.includes(colLower);
+          const isFk = tblKeys.fk.includes(colLower);
+          const formattedName = formatHeaderLabel(h);
+
+          let tags = '';
+          if (isPk) tags += '<span class="key-tag pk-tag">P.K</span> ';
+          if (isFk) tags += '<span class="key-tag fk-tag">F.K</span>';
+
+          const nameHtml = isPk
+            ? `<strong style="font-weight: 800; color: #0f172a;">${formattedName}</strong>`
+            : `<span style="font-weight: 600; color: #475569;">${formattedName}</span>`;
+
+          return `<th style="text-align: center; vertical-align: middle; padding: 10px 10px;">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+              <div>${nameHtml}</div>
+              ${tags ? `<div style="margin-top: 5px; display: flex; gap: 4px; justify-content: center;">${tags}</div>` : ''}
+            </div>
+          </th>`;
+        }).join('');
+
+        trB.innerHTML = (d.rows || []).map(r => `
+          <tr>${d.headers.map(h => {
+            const colLower = h.toLowerCase();
+            const isPk = tblKeys.pk.includes(colLower);
+            const val = r[h] !== null ? r[h] : '<span style="color:#94a3b8;">NULL</span>';
+            return isPk 
+              ? `<td class="pk-cell"><strong>${val}</strong></td>`
+              : `<td>${val}</td>`;
+          }).join('')}</tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function loadTelemetry() {
+      try {
+        const res = await fetch('/api/telemetry');
+        const logs = await res.json();
+        const f = document.getElementById('telemetryFeed');
+        if (!f) return;
+        if (!logs.length) {
+          f.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No queries recorded in telemetry buffer yet.</div>';
+          return;
+        }
+        f.innerHTML = logs.map(l => `
+          <div class="log-item">
+            <div class="log-header">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="pill-badge pill-blue">${l.type}</span>
+                <strong>${l.title}</strong>
+              </div>
+              <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">${l.timestamp} (${l.time_ms} ms)</span>
+            </div>
+            ${l.sql ? `<div class="vscode-box">${formatVsCodeSql(l.sql)}</div>` : ''}
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">${l.state_change}</div>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function loadQueryPills() {
+      try {
+        const res = await fetch('/api/queries');
+        const qList = await res.json();
+        const p = document.getElementById('queryPills');
+        if (!p) return;
+        p.innerHTML = qList.map((q, idx) => `
+          <button class="query-btn ${idx === 0 ? 'active' : ''}" onclick="runNamedQuery('${q.id}', this)">${q.id}</button>
+        `).join('');
+        if (qList.length) runNamedQuery(qList[0].id);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function runNamedQuery(qid, btn) {
+      if (btn) {
+        document.querySelectorAll('#queryPills .query-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      try {
+        const res = await fetch(`/api/queries/${qid}`);
+        const d = await res.json();
+        document.getElementById('qTitle').innerText = `${d.id}: ${d.title}`;
+        document.getElementById('qSql').innerHTML = formatVsCodeSql(d.sql);
+        const qH = document.getElementById('qHeaders');
+        const qB = document.getElementById('qBody');
+        qH.innerHTML = (d.headers || []).map(h => `<th style="text-align: center; vertical-align: middle; padding: 10px 10px;">${formatHeaderLabel(h)}</th>`).join('');
+        qB.innerHTML = (d.rows || []).map(r => `
+          <tr>${d.headers.map(h => `<td>${r[h] !== null ? r[h] : '<span style="color:#94a3b8;">NULL</span>'}</td>`).join('')}</tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function runRawSql() {
+      const sql = document.getElementById('rawSql').value.trim();
+      if (!sql) return;
+      try {
+        const res = await fetch('/api/execute_raw_sql', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({sql})
+        });
+        const d = await res.json();
+        if (d.error) {
+          showToast('SQL Error: ' + d.error);
+          return;
+        }
+        showToast(d.message || 'Query executed successfully');
+        const rH = document.getElementById('rawH');
+        const rB = document.getElementById('rawB');
+        if (d.headers && d.headers.length) {
+          rH.innerHTML = d.headers.map(h => `<th>${h}</th>`).join('');
+          rB.innerHTML = (d.rows || []).map(r => `
+            <tr>${d.headers.map(h => `<td>${r[h] !== null ? r[h] : '<span style="color:#94a3b8;">NULL</span>'}</td>`).join('')}</tr>
+          `).join('');
+        } else {
+          rH.innerHTML = '<th>Status</th><th>Rows Affected</th>';
+          rB.innerHTML = `<tr><td>Executed</td><td>${d.rows_affected || 0}</td></tr>`;
+        }
+        loadStats();
+      } catch (e) {
+        showToast('Error: ' + e);
+      }
+    }
+
+    async function loadAuditReport() {
+      try {
+        const res = await fetch('/api/cursor/audit');
+        const d = await res.json();
+        document.getElementById('auditTotal').innerText = d.summary.total_evaluated;
+        document.getElementById('auditHonors').innerText = d.summary.honors_count;
+        document.getElementById('auditFirst').innerText = d.summary.first_class_count;
+        const b = document.getElementById('auditBody');
+        b.innerHTML = (d.records || []).map(r => `
+          <tr>
+            <td><span class="pill-badge pill-blue">${r.reg_no}</span></td>
+            <td>${r.first_name} ${r.last_name}</td>
+            <td>${r.dept_code}</td>
+            <td>${r.avg_marks ? r.avg_marks.toFixed(1) : 'N/A'}</td>
+            <td><strong>${r.cgpa ? r.cgpa.toFixed(2) : 'N/A'}</strong></td>
+            <td><span class="pill-badge ${r.standing.includes('Dean') ? 'pill-blue' : r.standing.includes('First') ? 'pill-green' : 'pill-amber'}">${r.standing}</span></td>
+          </tr>
+        `).join('');
+        showToast('Audit cursor traversal completed');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Initialize application on page load
+    window.onload = function() {
+      syncNavSlider();
+      loadStats();
+      loadMetadata();
+    };
+    window.addEventListener('resize', syncNavSlider);
+  </script>
+</body>
+</html>
