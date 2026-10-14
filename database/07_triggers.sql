@@ -1,6 +1,3 @@
--- Triggers for College Management System
-
--- Trigger 1: Increment seat count when a student enrolls
 CREATE OR REPLACE TRIGGER trg_enrollment_seat_increment
 AFTER INSERT ON ENROLLMENT
 FOR EACH ROW
@@ -11,7 +8,6 @@ BEGIN
 END;
 /
 
--- Trigger 2: Decrement seat count when a student drops/unenrolls
 CREATE OR REPLACE TRIGGER trg_enrollment_seat_decrement
 AFTER DELETE ON ENROLLMENT
 FOR EACH ROW
@@ -25,7 +21,6 @@ BEGIN
 END;
 /
 
--- Trigger 3: Automatically compute grade based on marks obtained
 CREATE OR REPLACE TRIGGER trg_auto_compute_grade
 BEFORE INSERT OR UPDATE ON EXAM_RESULT
 FOR EACH ROW
@@ -52,7 +47,6 @@ BEGIN
 END;
 /
 
--- Trigger 4: Prevent enrollment if course offering is full
 CREATE OR REPLACE TRIGGER trg_prevent_over_enrollment
 BEFORE INSERT ON ENROLLMENT
 FOR EACH ROW

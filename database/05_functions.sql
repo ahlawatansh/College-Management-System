@@ -1,7 +1,3 @@
--- Functions for College Management System
-
--- Function 1: Calculate Student GPA
--- Returns weighted CGPA on a 10.0 scale based on course credits
 CREATE OR REPLACE FUNCTION Calculate_Student_GPA_Func (
     p_student_id IN INTEGER
 ) RETURN NUMBER
@@ -47,8 +43,6 @@ EXCEPTION
 END Calculate_Student_GPA_Func;
 /
 
--- Function 2: Calculate Pending Fee
--- Computes remaining tuition balance owed by a student
 CREATE OR REPLACE FUNCTION Calculate_Pending_Fee_Func (
     p_student_id       IN INTEGER,
     p_standard_fee     IN NUMBER DEFAULT 190000.00
@@ -75,8 +69,6 @@ EXCEPTION
 END Calculate_Pending_Fee_Func;
 /
 
--- Function 3: Get Available Seats
--- Returns remaining seats for a course offering
 CREATE OR REPLACE FUNCTION Get_Offering_Available_Seats_Func (
     p_offering_id IN INTEGER
 ) RETURN INTEGER

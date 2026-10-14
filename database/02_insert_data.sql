@@ -1,70 +1,62 @@
--- Sample data for College Management System
-
--- 1. Departments (5 Departments)
 INSERT INTO DEPARTMENT (dept_id, dept_name, dept_code, building, budget, established_year) VALUES
-(1, 'Department 1', 'DEP_01', 'Block A', 1500000.00, 1995),
-(2, 'Department 2', 'DEP_02', 'Block B', 1250000.00, 2005),
-(3, 'Department 3', 'DEP_03', 'Block A', 1100000.00, 2000),
-(4, 'Department 4', 'DEP_04', 'Block C', 1400000.00, 1998),
-(5, 'Department 5', 'DEP_05', 'Block D', 950000.00,  1996);
+(1, 'School of Computer Science & Engineering', 'SCOPE',  'SJT Block',  4500000.00, 1995),
+(2, 'School of Electronics Engineering',          'SENSE',  'TT Block',   3800000.00, 1998),
+(3, 'School of Mechanical Engineering',           'SMEC',   'MB Block',   3200000.00, 1990),
+(4, 'School of Electrical Engineering',           'SELECT', 'MGB Block',  2900000.00, 1992),
+(5, 'School of Advanced Sciences',                'SAS',    'CDMM Block', 2100000.00, 1984);
 
--- 2. Faculty (10 Faculty Members)
 INSERT INTO FACULTY (faculty_id, first_name, last_name, email, phone, hire_date, designation, salary, dept_id) VALUES
-(101, 'Faculty', '1',  'faculty1@college.edu',  '9800000101', '2010-06-15', 'Professor',           145000.00, 1),
-(102, 'Faculty', '2',  'faculty2@college.edu',  '9800000102', '2012-08-20', 'Associate Professor', 115000.00, 2),
-(103, 'Faculty', '3',  'faculty3@college.edu',  '9800000103', '2015-01-10', 'Assistant Professor', 88000.00,  1),
-(104, 'Faculty', '4',  'faculty4@college.edu',  '9800000104', '2008-11-01', 'HOD',                 160000.00, 3),
-(105, 'Faculty', '5',  'faculty5@college.edu',  '9800000105', '2014-04-18', 'Associate Professor', 110000.00, 4),
-(106, 'Faculty', '6',  'faculty6@college.edu',  '9800000106', '2016-09-05', 'Assistant Professor', 82000.00,  5),
-(107, 'Faculty', '7',  'faculty7@college.edu',  '9800000107', '2018-07-22', 'Assistant Professor', 78000.00,  2),
-(108, 'Faculty', '8',  'faculty8@college.edu',  '9800000108', '2011-03-30', 'Associate Professor', 112000.00, 3),
-(109, 'Faculty', '9',  'faculty9@college.edu',  '9800000109', '2019-12-01', 'Lecturer',            65000.00,  4),
-(110, 'Faculty', '10', 'faculty10@college.edu', '9800000110', '2006-02-14', 'Dean',                175000.00, 5);
+(101, 'S.',               'Rajalakshmi',       's.rajalakshmi@vit.ac.in',  '9840123101', '2010-06-15', 'Professor',           165000.00, 1),
+(102, 'K.',               'Ramesh Kumar',      'k.rameshkumar@vit.ac.in',  '9840123102', '2012-08-20', 'Associate Professor', 135000.00, 2),
+(103, 'Arunkumar',        'G.',                'arunkumar.g@vit.ac.in',    '9840123103', '2015-01-10', 'Assistant Professor', 98000.00,  1),
+(104, 'Venkatasubramanian', 'R.',              'r.venkat@vit.ac.in',       '9840123104', '2008-11-01', 'HOD',                 175000.00, 3),
+(105, 'Meenakshi',        'Sundaram',          'meenakshi.s@vit.ac.in',    '9840123105', '2014-04-18', 'Associate Professor', 125000.00, 4),
+(106, 'Chitra',           'Narayanan',         'chitra.n@vit.ac.in',       '9840123106', '2016-09-05', 'Assistant Professor', 92000.00,  5),
+(107, 'Balasubramanian',  'B.',                'b.bala@vit.ac.in',         '9840123107', '2018-07-22', 'Assistant Professor', 88000.00,  2),
+(108, 'Priya',            'Sivakumar',         'priya.s@vit.ac.in',        '9840123108', '2011-03-30', 'Associate Professor', 128000.00, 3),
+(109, 'Harish',           'Venkatesh',         'harish.v@vit.ac.in',       '9840123109', '2019-12-01', 'Assistant Professor', 78000.00,  4),
+(110, 'Saravanan',        'Krishnan',          'k.saravanan@vit.ac.in',    '9840123110', '2006-02-14', 'Dean',                195000.00, 5);
 
--- 3. Students (20 Students)
 INSERT INTO STUDENT (student_id, reg_no, first_name, last_name, email, phone, date_of_birth, gender, admission_date, dept_id, current_semester, status) VALUES
-(201, 'REG_01', 'Student', '1',  'student1@college.edu',  '9811000101', '2004-03-14', 'Male',   '2024-07-15', 1, 4, 'Active'),
-(202, 'REG_02', 'Student', '2',  'student2@college.edu',  '9811000102', '2004-06-25', 'Male',   '2024-07-15', 1, 4, 'Active'),
-(203, 'REG_03', 'Student', '3',  'student3@college.edu',  '9811000103', '2004-11-08', 'Male',   '2024-07-15', 2, 4, 'Active'),
-(204, 'REG_04', 'Student', '4',  'student4@college.edu',  '9811000104', '2004-01-20', 'Male',   '2024-07-15', 2, 4, 'Active'),
-(205, 'REG_05', 'Student', '5',  'student5@college.edu',  '9811000105', '2004-08-12', 'Female', '2024-07-15', 1, 4, 'Active'),
-(206, 'REG_06', 'Student', '6',  'student6@college.edu',  '9811000106', '2003-12-05', 'Male',   '2023-07-20', 3, 6, 'Active'),
-(207, 'REG_07', 'Student', '7',  'student7@college.edu',  '9811000107', '2004-04-17', 'Female', '2024-07-15', 4, 4, 'Active'),
-(208, 'REG_08', 'Student', '8',  'student8@college.edu',  '9811000108', '2003-09-30', 'Male',   '2023-07-20', 5, 6, 'Active'),
-(209, 'REG_09', 'Student', '9',  'student9@college.edu',  '9811000109', '2005-02-18', 'Female', '2025-07-10', 3, 2, 'Active'),
-(210, 'REG_10', 'Student', '10', 'student10@college.edu', '9811000110', '2004-07-09', 'Male',   '2024-07-15', 4, 4, 'Active'),
-(211, 'REG_11', 'Student', '11', 'student11@college.edu', '9811000111', '2003-05-14', 'Female', '2023-07-20', 5, 6, 'Active'),
-(212, 'REG_12', 'Student', '12', 'student12@college.edu', '9811000112', '2004-10-22', 'Male',   '2024-07-15', 2, 4, 'Active'),
-(213, 'REG_13', 'Student', '13', 'student13@college.edu', '9811000113', '2004-02-11', 'Female', '2024-07-15', 1, 4, 'Active'),
-(214, 'REG_14', 'Student', '14', 'student14@college.edu', '9811000114', '2003-08-19', 'Male',   '2023-07-20', 2, 6, 'Active'),
-(215, 'REG_15', 'Student', '15', 'student15@college.edu', '9811000115', '2005-01-30', 'Female', '2025-07-10', 3, 2, 'Active'),
-(216, 'REG_16', 'Student', '16', 'student16@college.edu', '9811000116', '2004-05-14', 'Male',   '2024-07-15', 4, 4, 'Active'),
-(217, 'REG_17', 'Student', '17', 'student17@college.edu', '9811000117', '2004-12-03', 'Female', '2024-07-15', 5, 4, 'Active'),
-(218, 'REG_18', 'Student', '18', 'student18@college.edu', '9811000118', '2003-04-27', 'Male',   '2023-07-20', 1, 6, 'Active'),
-(219, 'REG_19', 'Student', '19', 'student19@college.edu', '9811000119', '2005-09-16', 'Female', '2025-07-10', 2, 2, 'Active'),
-(220, 'REG_20', 'Student', '20', 'student20@college.edu', '9811000120', '2004-11-25', 'Male',   '2024-07-15', 3, 4, 'Active');
+(201, '21BCE1042', 'Aarav',     'Sharma',      'aarav.sharma2021@vitstudent.ac.in', '9876543201', '2003-03-14', 'Male',   '2021-07-15', 1, 6, 'Active'),
+(202, '21BCE2415', 'Ananya',    'Iyer',        'ananya.iyer2021@vitstudent.ac.in',  '9876543202', '2003-06-25', 'Female', '2021-07-15', 1, 6, 'Active'),
+(203, '22BEC0891', 'Rohan',     'Verma',       'rohan.verma2022@vitstudent.ac.in',  '9876543203', '2004-11-08', 'Male',   '2022-07-15', 2, 4, 'Active'),
+(204, '22BEC1120', 'Priyanshu', 'Das',         'priyanshu.das2022@vitstudent.ac.in','9876543204', '2004-01-20', 'Male',   '2022-07-15', 2, 4, 'Active'),
+(205, '21BCE0984', 'Sneha',     'Nair',        'sneha.nair2021@vitstudent.ac.in',   '9876543205', '2003-08-12', 'Female', '2021-07-15', 1, 6, 'Active'),
+(206, '22BME0345', 'Aditya',    'Kulkarni',    'aditya.k2022@vitstudent.ac.in',     '9876543206', '2004-12-05', 'Male',   '2022-07-20', 3, 4, 'Active'),
+(207, '22BEE0412', 'Tanvi',     'Patel',       'tanvi.patel2022@vitstudent.ac.in',  '9876543207', '2004-04-17', 'Female', '2022-07-15', 4, 4, 'Active'),
+(208, '21BCH0189', 'Siddharth', 'Rao',         'siddharth.rao2021@vitstudent.ac.in','9876543208', '2003-09-30', 'Male',   '2021-07-20', 5, 6, 'Active'),
+(209, '23BME1005', 'Ishaan',    'Mukherjee',   'ishaan.m2023@vitstudent.ac.in',     '9876543209', '2005-02-18', 'Male',   '2023-07-10', 3, 2, 'Active'),
+(210, '22BEE0782', 'Meera',     'Swaminathan', 'meera.s2022@vitstudent.ac.in',      '9876543210', '2004-07-09', 'Female', '2022-07-15', 4, 4, 'Active'),
+(211, '21BCH0231', 'Kavya',     'Reddy',       'kavya.reddy2021@vitstudent.ac.in',  '9876543211', '2003-05-14', 'Female', '2021-07-20', 5, 6, 'Active'),
+(212, '22BEC1450', 'Varun',     'Teja',        'varun.teja2022@vitstudent.ac.in',   '9876543212', '2004-10-22', 'Male',   '2022-07-15', 2, 4, 'Active'),
+(213, '21BCE3102', 'Rhea',      'Menon',       'rhea.menon2021@vitstudent.ac.in',   '9876543213', '2003-02-11', 'Female', '2021-07-15', 1, 6, 'Active'),
+(214, '22BEC0420', 'Arjun',     'Srinivasan',  'arjun.s2022@vitstudent.ac.in',      '9876543214', '2004-08-19', 'Male',   '2022-07-20', 2, 4, 'Active'),
+(215, '23BME0810', 'Diya',      'Bansal',      'diya.b2023@vitstudent.ac.in',       '9876543215', '2005-01-30', 'Female', '2023-07-10', 3, 2, 'Active'),
+(216, '22BEE0519', 'Nikhil',    'Gupta',       'nikhil.g2022@vitstudent.ac.in',     '9876543216', '2004-05-14', 'Male',   '2022-07-15', 4, 4, 'Active'),
+(217, '22BCH0341', 'Pooja',     'Hegde',       'pooja.h2022@vitstudent.ac.in',      '9876543217', '2004-12-03', 'Female', '2022-07-15', 5, 4, 'Active'),
+(218, '21BCE1980', 'Gautam',    'Karthik',     'gautam.k2021@vitstudent.ac.in',     '9876543218', '2003-04-27', 'Male',   '2021-07-20', 1, 6, 'Active'),
+(219, '23BEC0114', 'Sanya',     'Malhotra',    'sanya.m2023@vitstudent.ac.in',      '9876543219', '2005-09-16', 'Female', '2023-07-10', 2, 2, 'Active'),
+(220, '22BME1432', 'Dhruv',     'Chopra',      'dhruv.c2022@vitstudent.ac.in',      '9876543220', '2004-11-25', 'Male',   '2022-07-15', 3, 4, 'Active');
 
--- 4. Courses (7 Courses)
 INSERT INTO COURSE (course_id, course_code, course_title, credits, dept_id, course_level) VALUES
-(301, 'CRS_01', 'Course 1', 4, 1, 'Intermediate'),
-(302, 'CRS_02', 'Course 2', 4, 1, 'Introductory'),
-(303, 'CRS_03', 'Course 3', 4, 2, 'Advanced'),
-(304, 'CRS_04', 'Course 4', 3, 2, 'Intermediate'),
-(305, 'CRS_05', 'Course 5', 3, 3, 'Intermediate'),
-(306, 'CRS_06', 'Course 6', 4, 4, 'Intermediate'),
-(307, 'CRS_07', 'Course 7', 3, 5, 'Intermediate');
+(301, 'CSE2001', 'Data Structures and Algorithms',             4, 1, 'Intermediate'),
+(302, 'CSE1001', 'Problem Solving and Programming in Python',   4, 1, 'Introductory'),
+(303, 'ECE2002', 'Digital Logic & System Design',               4, 2, 'Advanced'),
+(304, 'ECE1002', 'Semiconductor Devices & Circuits',           3, 2, 'Intermediate'),
+(305, 'MEE2001', 'Engineering Thermodynamics',                 3, 3, 'Intermediate'),
+(306, 'EEE2003', 'Signals and Systems Analysis',                4, 4, 'Intermediate'),
+(307, 'CHY1002', 'Environmental Chemistry & Ecology',          3, 5, 'Introductory');
 
--- 5. Course Offerings (7 Offerings)
 INSERT INTO COURSE_OFFERING (offering_id, course_id, faculty_id, academic_year, semester, classroom, max_capacity, current_enrolled) VALUES
-(401, 301, 101, '2025-2026', 4, 'Room 101', 60, 8),
-(402, 302, 103, '2025-2026', 4, 'Room 102', 60, 5),
-(403, 303, 102, '2025-2026', 4, 'Room 103', 50, 6),
-(404, 304, 107, '2025-2026', 4, 'Room 104', 50, 0),
-(405, 305, 104, '2025-2026', 6, 'Room 105', 55, 2),
-(406, 306, 105, '2025-2026', 4, 'Room 106', 45, 2),
-(407, 307, 106, '2025-2026', 6, 'Room 107', 40, 2);
+(401, 301, 101, '2025-2026', 4, 'SJT-401',  60, 8),
+(402, 302, 103, '2025-2026', 4, 'SJT-312',  60, 5),
+(403, 303, 102, '2025-2026', 4, 'TT-502',   50, 6),
+(404, 304, 107, '2025-2026', 4, 'TT-208',   50, 0),
+(405, 305, 104, '2025-2026', 6, 'MB-301',   55, 2),
+(406, 306, 105, '2025-2026', 4, 'MGB-104',  45, 2),
+(407, 307, 106, '2025-2026', 6, 'CDMM-201', 40, 2);
 
--- 6. Enrollments (25 Enrollments)
 INSERT INTO ENROLLMENT (enrollment_id, student_id, offering_id, enrollment_date, status) VALUES
 (501, 201, 401, '2025-01-05', 'Completed'),
 (502, 201, 403, '2025-01-06', 'Completed'),
@@ -92,7 +84,6 @@ INSERT INTO ENROLLMENT (enrollment_id, student_id, offering_id, enrollment_date,
 (524, 219, 402, '2025-01-12', 'Completed'),
 (525, 220, 403, '2025-01-12', 'Completed');
 
--- 7. Exam Results (25 Records)
 INSERT INTO EXAM_RESULT (result_id, enrollment_id, marks_obtained, grade, exam_date, remarks) VALUES
 (601, 501, 94.50, 'S', '2025-05-10', 'Excellent performance'),
 (602, 502, 88.00, 'A', '2025-05-12', 'Very good evaluation'),
@@ -120,7 +111,6 @@ INSERT INTO EXAM_RESULT (result_id, enrollment_id, marks_obtained, grade, exam_d
 (624, 524, 76.50, 'B', '2025-05-21', 'Satisfactory performance'),
 (625, 525, 87.00, 'A', '2025-05-21', 'Strong concepts');
 
--- 8. Fee Payments (25 Records)
 INSERT INTO FEE_PAYMENT (payment_id, student_id, amount_paid, payment_date, payment_method, transaction_ref, payment_status) VALUES
 (701, 201, 95000.00, '2024-07-20', 'Net Banking', 'TXN_01', 'Success'),
 (702, 201, 95000.00, '2025-01-10', 'UPI',         'TXN_02', 'Success'),

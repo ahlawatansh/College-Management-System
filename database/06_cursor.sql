@@ -1,7 +1,3 @@
--- Cursor for College Management System
-
--- Cursor Procedure: Generate Academic Report
--- Iterates over student records to display academic summary
 CREATE OR REPLACE PROCEDURE Generate_Academic_Report_Cursor
 IS
     CURSOR cur_student_summary IS
@@ -43,10 +39,8 @@ BEGIN
                          RPAD('COURSES', 10) || RPAD('CREDITS', 10) || RPAD('AVG MARKS', 12) || 'STANDING');
     DBMS_OUTPUT.PUT_LINE('----------------------------------------------------------------------------------------');
 
-    -- Open cursor
     OPEN cur_student_summary;
 
-    -- Fetch loop
     LOOP
         FETCH cur_student_summary INTO 
             v_student_id, 
@@ -86,7 +80,6 @@ BEGIN
         );
     END LOOP;
 
-    -- Close cursor
     CLOSE cur_student_summary;
 
     DBMS_OUTPUT.PUT_LINE('----------------------------------------------------------------------------------------');

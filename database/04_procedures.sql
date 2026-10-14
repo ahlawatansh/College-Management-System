@@ -1,7 +1,3 @@
--- Stored Procedures for College Management System
-
--- Procedure 1: Enroll Student
--- Enrolls a student in a course offering after checking capacity and duplicate registration
 CREATE OR REPLACE PROCEDURE Enroll_Student_Proc (
     p_student_id    IN  INTEGER,
     p_offering_id   IN  INTEGER,
@@ -22,7 +18,6 @@ IS
     e_already_registered EXCEPTION;
     e_class_full         EXCEPTION;
 BEGIN
-    -- Check if student exists
     SELECT COUNT(*), MAX(first_name || ' ' || last_name)
     INTO v_student_count, v_student_name
     FROM STUDENT
@@ -32,7 +27,6 @@ BEGIN
         RAISE e_student_not_found;
     END IF;
 
-    -- Check course offering and seats
     SELECT COUNT(*), MAX(co.max_capacity), MAX(co.current_enrolled), MAX(c.course_code)
     INTO v_offering_count, v_max_capacity, v_current_enrolled, v_course_code
     FROM COURSE_OFFERING co
@@ -43,7 +37,6 @@ BEGIN
         RAISE e_offering_not_found;
     END IF;
 
-    -- Check if already enrolled
     SELECT COUNT(*)
     INTO v_already_enrolled
     FROM ENROLLMENT
@@ -53,18 +46,15 @@ BEGIN
         RAISE e_already_registered;
     END IF;
 
-    -- Check capacity
     IF v_current_enrolled >= v_max_capacity THEN
         RAISE e_class_full;
     END IF;
 
-    -- Insert new enrollment
     SELECT NVL(MAX(enrollment_id), 500) + 1 INTO v_new_enrollment_id FROM ENROLLMENT;
 
     INSERT INTO ENROLLMENT (enrollment_id, student_id, offering_id, enrollment_date, status)
     VALUES (v_new_enrollment_id, p_student_id, p_offering_id, SYSDATE, 'Enrolled');
 
-    -- Increment seat count
     UPDATE COURSE_OFFERING
     SET current_enrolled = current_enrolled + 1
     WHERE offering_id = p_offering_id;
@@ -94,8 +84,6 @@ EXCEPTION
 END Enroll_Student_Proc;
 /
 
--- Procedure 2: Process Fee Payment
--- Records fee payment and outputs confirmation
 CREATE OR REPLACE PROCEDURE Process_Fee_Payment_Proc (
     p_student_id       IN  INTEGER,
     p_amount           IN  NUMBER,
@@ -114,7 +102,6 @@ IS
     e_invalid_amount   EXCEPTION;
     e_duplicate_txn    EXCEPTION;
 BEGIN
-    -- Check student
     SELECT COUNT(*), MAX(first_name || ' ' || last_name), MAX(reg_no)
     INTO v_student_count, v_student_name, v_reg_no
     FROM STUDENT
@@ -124,12 +111,10 @@ BEGIN
         RAISE e_invalid_student;
     END IF;
 
-    -- Validate amount
     IF p_amount <= 0 THEN
         RAISE e_invalid_amount;
     END IF;
 
-    -- Check duplicate transaction
     SELECT COUNT(*)
     INTO v_dup_txn_count
     FROM FEE_PAYMENT
@@ -139,7 +124,6 @@ BEGIN
         RAISE e_duplicate_txn;
     END IF;
 
-    -- Insert payment
     SELECT NVL(MAX(payment_id), 700) + 1 INTO v_new_payment_id FROM FEE_PAYMENT;
 
     INSERT INTO FEE_PAYMENT (payment_id, student_id, amount_paid, payment_date, payment_method, transaction_ref, payment_status)
@@ -167,8 +151,6 @@ EXCEPTION
 END Process_Fee_Payment_Proc;
 /
 
--- Procedure 3: Record Exam Result
--- Inserts or updates marks and assigns grade automatically
 CREATE OR REPLACE PROCEDURE Record_Exam_Result_Proc (
     p_enrollment_id    IN  INTEGER,
     p_marks            IN  NUMBER,
@@ -186,7 +168,6 @@ IS
     e_invalid_enrollment EXCEPTION;
     e_invalid_marks      EXCEPTION;
 BEGIN
-    -- Check enrollment
     SELECT COUNT(*), MAX(s.reg_no), MAX(c.course_title)
     INTO v_enroll_count, v_student_reg, v_course_title
     FROM ENROLLMENT e
@@ -199,12 +180,10 @@ BEGIN
         RAISE e_invalid_enrollment;
     END IF;
 
-    -- Validate marks
     IF p_marks < 0 OR p_marks > 100 THEN
         RAISE e_invalid_marks;
     END IF;
 
-    -- Determine grade
     IF p_marks >= 90 THEN
         v_grade := 'S';
     ELSIF p_marks >= 80 THEN
@@ -221,7 +200,6 @@ BEGIN
         v_grade := 'F';
     END IF;
 
-    -- Insert or update
     SELECT COUNT(*) INTO v_result_count FROM EXAM_RESULT WHERE enrollment_id = p_enrollment_id;
 
     IF v_result_count > 0 THEN

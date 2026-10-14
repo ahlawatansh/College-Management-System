@@ -3,235 +3,332 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>College Management System</title>
+  <title>CampusCore — College Management & Relational Database System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --card-hover: #f1f5f9;
-      --input-bg: #ffffff;
-      --border: #e2e8f0;
-      --border-focus: #7c3aed;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --primary: #7c3aed;
-      --primary-glow: rgba(124, 58, 237, 0.15);
-      --purple-bg: #f5f3ff;
-      --purple-border: #ddd6fe;
-      --purple-text: #6d28d9;
-      --primary-glow: rgba(124, 58, 237, 0.15);
-      --emerald: #059669;
-      --emerald-bg: #ecfdf5;
-      --emerald-border: #a7f3d0;
-      --blue-bg: #f5f3ff;
-      --blue-border: #ddd6fe;
-      --amber: #d97706;
-      --amber-bg: #fffbeb;
-      --amber-border: #fde68a;
-      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
-      --font-mono: Consolas, "SF Mono", Menlo, Monaco, "Courier New", monospace;
+      
+      --bg: #FAF9FB;
+      --surface: #FFFFFF;
+      --surface-subtle: #F8F7FA;
+      --surface-hover: #F3F1F7;
+      --border: #E8E5EC;
+      --border-subtle: #F2F0F5;
+      --border-focus: #4C1D95;
+
+      
+      --purple-dark: #4C1D95;        
+      --purple-dark-hover: #3B0764;  
+      --purple-brand: #581C87;       
+      --purple-accent: #6B21A8;      
+      --purple-light: #F5F3FF;       
+      --purple-border: #DDD6FE;      
+      --purple-text: #4C1D95;        
+
+      
+      --amber: #D97706;
+      --amber-bg: #FFFBEB;
+      --amber-border: #FDE68A;
+      --amber-text: #92400E;
+
+      
+      --text-main: #09090B;
+      --text-body: #1E293B;
+      --text-muted: #64748B;
+      --text-faint: #94A3B8;
+
+      
+      --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-body: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Plus Jakarta Sans', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      
       --radius-sm: 8px;
       --radius-md: 14px;
-      --radius-lg: 20px;
+      --radius-lg: 18px;
       --radius-pill: 9999px;
-      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+
+      
+      --shadow-subtle: none;
+      --shadow-dropdown: none;
+      --shadow-pill: none;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      box-shadow: none !important;
+    }
+
+    *::-webkit-scrollbar,
+    ::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    * {
+      -ms-overflow-style: none !important;
+      scrollbar-width: none !important;
+    }
 
     body {
-      font-family: var(--font);
+      font-family: var(--font-body);
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-body);
       line-height: 1.5;
-      font-size: 14px;
+      font-size: 13px;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 60px;
+      padding-bottom: 72px;
+      min-height: 100vh;
     }
 
-    /* Clean Top Header (Left Title, Right Minimalist Slider) */
+    
     header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(12px);
+      background: #FFFFFF;
       border-bottom: 1px solid var(--border);
-      padding: 14px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       position: sticky;
       top: 0;
       z-index: 100;
+      transition: background 0.2s ease;
     }
 
-    .brand-wrap h1 {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text);
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 11px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      min-height: 58px;
     }
 
-    /* Minimalist Sliding Segment Switcher (Frameless, No Outer Cover, Smooth Slide) */
-    .nav-switcher {
-      position: relative;
+    .header-left-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-shrink: 0;
+    }
+
+    
+    .brand-link {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      text-decoration: none;
+      user-select: none;
+      transition: opacity 0.15s ease;
+      flex-shrink: 0;
+    }
+    .brand-link:hover {
+      opacity: 0.9;
+    }
+
+    .brand-logo {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      display: inline-flex;
+      align-items: baseline;
+    }
+
+    .brand-logo .logo-main {
+      font-weight: 800;
+      color: #09090B;
+    }
+
+    .brand-logo .logo-accent {
+      font-weight: 900;
+      color: var(--purple-dark);
+      margin-left: 5px;
+    }
+
+    
+    .header-center-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sub-nav-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      overflow-x: auto;
+      max-width: 100%;
+      transition: opacity 0.16s ease;
+    }
+
+    
+    .header-right-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .view-toggle-pill {
       display: inline-flex;
       align-items: center;
-      background: transparent; /* No outer cover */
-      border: none;             /* No outer cover border */
-      padding: 0;
-      gap: 0;
-    }
-
-    .nav-slider-indicator {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      background: #f5f3ff; /* Soft light purple pill */
-      border: 1px solid #ddd6fe; /* Delicate hairline border */
+      gap: 10px;
+      height: 38px;
+      padding: 3px 16px 3px 4px;
       border-radius: var(--radius-pill);
-      transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1), width 0.28s cubic-bezier(0.25, 1, 0.5, 1);
-      z-index: 1;
-      pointer-events: none;
-      box-shadow: 0 1px 4px rgba(124, 58, 237, 0.08);
-    }
-
-    .nav-switcher-btn {
-      position: relative;
-      z-index: 2;
-      font-family: inherit;
-      font-size: 13.5px;
-      font-weight: 500;
-      padding: 8px 22px;
-      border-radius: var(--radius-pill);
-      border: none;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      user-select: none;
       cursor: pointer;
+      font-family: var(--font-body);
+      transition: background-color 0.16s ease, border-color 0.16s ease;
+      outline: none;
+      text-align: left;
+      box-shadow: none !important;
+    }
+
+    .view-toggle-pill:hover {
+      border: 1px solid #D4D4D8 !important;
+      background: #F4F4F5;
+      transform: none;
+      box-shadow: none !important;
+    }
+
+    .view-toggle-pill:active {
+      transform: scale(0.98);
+    }
+
+    .monogram-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-pill);
+      background: #09090B;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      flex-shrink: 0;
+      transition: background-color 0.16s ease;
+      box-shadow: none !important;
+    }
+
+    .view-toggle-pill:hover .monogram-avatar {
+      transform: none;
+      background: #18181B;
+    }
+
+    .monogram-icon {
+      width: 15px;
+      height: 15px;
+      stroke: #FFFFFF;
+      stroke-width: 2.2;
+    }
+
+    .user-meta {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .user-name {
+      font-family: var(--font-heading);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #09090B;
+      line-height: 1.2;
+    }
+
+    .user-role {
+      font-size: 9.5px;
+      font-weight: 500;
+      color: #71717A;
+      line-height: 1.15;
+    }
+
+    
+    .sub-tab-btn {
+      font-family: var(--font-body);
       background: transparent;
-      color: var(--text-muted);
-      transition: color 0.2s ease;
+      border: 1px solid transparent;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #52525B;
+      height: 32px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.16s ease;
       white-space: nowrap;
+      user-select: none;
+      box-shadow: none !important;
     }
 
-    .nav-switcher-btn:hover {
-      color: var(--text);
+    .sub-tab-btn:hover {
+      color: #09090B;
+      background: #F4F4F5;
+      border-color: transparent;
+      font-weight: 500;
     }
 
-    .nav-switcher-btn.active {
-      color: #6d28d9;
-      font-weight: 600;
+    .sub-tab-btn.active {
+      color: #FFFFFF;
+      background: #09090B;
+      border-color: #09090B;
+      font-weight: 700;
+      height: 36px;
+      padding: 0 18px;
+      font-size: 12px;
+      box-shadow: none !important;
     }
 
-    /* Smooth page slide & fade transitions between views */
-    @keyframes viewFadeSlide {
+    
+    @keyframes viewFade {
       from {
         opacity: 0;
-        transform: translateY(8px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
     .view-container {
-      animation: viewFadeSlide 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: viewFade 0.16s ease;
     }
 
-    /* Sub Navigation Menu Bar - Full Height Rectangle Tabs, Flush with Upper & Bottom Borders */
-    .sub-menu {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      gap: 0;
-      height: 52px;
-      box-sizing: border-box;
-      overflow-x: auto;
+    #view-database .container {
+      padding-top: 28px;
     }
 
-    .sub-tab-btn {
-      font-family: inherit;
+    .mgmt-pane, .db-pane {
+      animation: viewFade 0.16s ease;
+    }
+
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    
+    .metrics-bar {
       background: transparent;
       border: none;
-      border-radius: 0; /* Proper rectangle: no circular / pill radius */
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text-muted);
-      padding: 0 24px;
-      height: 100%; /* Full height touching upper and bottom of menu bar */
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background-color 0.16s ease, color 0.16s ease, border-bottom 0.16s ease;
-      white-space: nowrap;
-      position: relative;
-      border-bottom: 3px solid transparent;
-      box-sizing: border-box;
-    }
-
-    .sub-tab-btn:hover {
-      color: var(--text);
-      background: #f1f5f9; /* Light grey whitish as before */
-      border-radius: 0;
-    }
-
-    .sub-tab-btn.active {
-      color: #6d28d9;
-      background: #f5f3ff; /* Proper full-height rectangle light purple active */
-      font-weight: 600;
-      border-bottom: 3px solid #7c3aed; /* Light purple indicator flush with bottom */
-      border-radius: 0;
-    }
-
-    .sub-tab-btn.active:hover {
-      color: #6d28d9;
-      background: #ede9fe; /* Subtle purple hover when active */
-    }
-
-    /* Filter pills for nested tables and queries */
-    .filter-tab-btn {
-      font-family: inherit;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-muted);
-      padding: 7px 16px;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      white-space: nowrap;
-    }
-
-    .filter-tab-btn:hover {
-      color: var(--text);
-      background: #f1f5f9; /* Light grey whitish as before */
-    }
-
-    .filter-tab-btn.active {
-      color: #6d28d9;
-      background: #f5f3ff;
-      border-color: #ddd6fe;
-      font-weight: 600;
-    }
-
-    /* Main Container */
-    .container {
-      max-width: 1320px;
-      margin: 28px auto 0 auto;
-      padding: 0 28px;
-    }
-
-    /* Single Container Metrics Bar Separated by Vertical Lines */
-    .metrics-bar {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 22px 16px;
-      margin-bottom: 28px;
-      box-shadow: var(--shadow);
+      border-bottom: 1px solid var(--border);
+      padding: 38px 0 24px 0;
+      margin-bottom: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -244,158 +341,290 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 5px;
+      gap: 3px;
       padding: 0 10px;
     }
 
     .metric-divider {
       width: 1px;
-      height: 52px;
+      height: 44px;
       background: var(--border);
       flex-shrink: 0;
     }
 
     .stat-label {
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.07em;
       color: var(--text-muted);
     }
 
     .stat-value {
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.02em;
+      font-family: var(--font-heading);
+      font-size: 27px;
+      font-weight: 800;
+      color: #09090B;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
     }
 
     .stat-hint {
-      font-size: 11px;
-      color: #059669;
-      font-weight: 500;
+      font-size: 10.5px;
+      color: var(--purple-accent);
+      font-weight: 600;
     }
 
-    /* General Curvy Card Layout */
+    
     .card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 26px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      padding: 32px 0;
+      margin-bottom: 0;
+      box-shadow: none;
       width: 100%;
+    }
+
+    .card:last-child {
+      border-bottom: none;
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       flex-wrap: wrap;
       gap: 12px;
     }
 
     .card-title {
+      font-family: var(--font-heading);
       font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.01em;
+      font-weight: 800;
+      color: #09090B;
+      letter-spacing: -0.02em;
     }
 
     .card-subtitle {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
       margin-top: 2px;
+      font-weight: 500;
     }
 
-    /* Clean Pill Badges */
+    
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+
+    .split-grid > .card {
+      border-bottom: none;
+      padding: 32px 0;
+    }
+
+    .split-grid > .card:first-child {
+      border-right: 1px solid var(--border);
+      padding-right: 40px;
+    }
+
+    .split-grid > .card:last-child {
+      padding-left: 40px;
+    }
+
+    @media (max-width: 1024px) {
+      .split-grid {
+        grid-template-columns: 1fr;
+      }
+      .split-grid > .card:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 32px;
+      }
+      .split-grid > .card:last-child {
+        padding-left: 0;
+        padding-top: 32px;
+      }
+    }
+
+    
     .pill-badge {
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 4px 12px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3.5px 11px;
       border-radius: var(--radius-pill);
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
     }
 
-    .pill-blue, .pill-purple { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
-    .pill-green { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-    .pill-amber { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
-    .pill-purple { background: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; }
-    .pill-gray { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+    .pill-blue, .pill-purple {
+      background: var(--purple-light);
+      color: var(--purple-text);
+      border: 1px solid var(--purple-border);
+    }
 
-    /* Primary Key (P.K) and Foreign Key (F.K) Badges */
+    .pill-green {
+      background: #ECFDF5;
+      color: #047857;
+      border: 1px solid #A7F3D0;
+    }
+
+    .pill-amber {
+      background: var(--amber-bg);
+      color: var(--amber-text);
+      border: 1px solid var(--amber-border);
+    }
+
+    .pill-gray {
+      background: #F8FAFC;
+      color: #475569;
+      border: 1px solid var(--border);
+    }
+
+    .pill-dark {
+      background: var(--purple-dark);
+      color: #FFFFFF;
+      border: 1px solid var(--purple-dark);
+    }
+
+    
     .key-tag {
       display: inline-block;
-      font-size: 9.5px;
-      font-weight: 700;
-      padding: 1.5px 5.5px;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 5px;
       border-radius: 4px;
-      letter-spacing: 0.05em;
-      line-height: 1.1;
+      letter-spacing: 0.06em;
+      line-height: 1;
       text-transform: uppercase;
     }
+
     .pk-tag {
-      background: #f5f3ff;
-      color: #7c3aed;
-      border: 1px solid #ddd6fe;
+      background: var(--purple-dark);
+      color: #FFFFFF;
+      font-weight: 800;
     }
+
     .fk-tag {
-      background: #eff6ff;
-      color: #2563eb;
-      border: 1px solid #bfdbfe;
+      background: var(--purple-light);
+      color: var(--purple-text);
+      border: 1px solid var(--purple-border);
     }
 
-    /* 16 Queries Dedicated Pill Styling and Spacing */
-    .query-pills-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-      margin-bottom: 24px;
-      padding: 16px 20px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-    }
-
-    .query-btn {
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 18px;
+    
+    .btn {
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 700;
+      height: 38px;
+      padding: 0 20px;
       border-radius: var(--radius-pill);
-      border: 1px solid var(--border);
-      background: #ffffff;
-      color: var(--text-muted);
+      border: 1px solid transparent;
       cursor: pointer;
-      transition: all 0.18s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 48px;
+      gap: 8px;
+      transition: all 0.18s cubic-bezier(0.25, 1, 0.5, 1);
+      white-space: nowrap;
       user-select: none;
+      letter-spacing: -0.01em;
     }
 
-    .query-btn:hover {
-      color: #6d28d9;
-      background: #f5f3ff;
-      border-color: #ddd6fe;
-      transform: translateY(-1px);
+    .btn:active {
+      transform: scale(0.98);
     }
 
-    .query-btn.active {
-      background: #7c3aed;
-      color: #ffffff;
-      border-color: #7c3aed;
-      box-shadow: 0 3px 10px rgba(124, 58, 237, 0.25);
-      font-weight: 700;
-      transform: translateY(-1px);
+    .btn-primary {
+      background: #09090B;
+      color: #FFFFFF;
+      border-color: #09090B;
     }
 
-    /* TABLES: FIXED WIDTH, NO HORIZONTAL SCROLLING, WRAP TEXT */
+    .btn-primary:hover {
+      background: #27272A;
+      border-color: #27272A;
+    }
+
+    .btn-emerald, .btn-purple {
+      background: #09090B;
+      color: #FFFFFF;
+      border-color: #09090B;
+    }
+
+    .btn-emerald:hover, .btn-purple:hover {
+      background: #27272A;
+      border-color: #27272A;
+    }
+
+    .btn-subtle {
+      background: #FFFFFF;
+      color: #334155;
+      border-color: var(--border);
+    }
+
+    .btn-subtle:hover {
+      background: #F4F4F5;
+      color: #09090B;
+      border-color: #D4D4D8;
+    }
+
+    
+    .search-pill-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 2px 14px 2px 12px;
+      transition: all 0.18s ease;
+      width: 280px;
+    }
+
+    .search-pill-wrapper:focus-within {
+      border-color: #09090B;
+    }
+
+    .search-pill-icon {
+      width: 14px;
+      height: 14px;
+      color: #94A3B8;
+      margin-right: 8px;
+      flex-shrink: 0;
+      stroke-width: 2.2;
+    }
+
+    .search-pill-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-main);
+      width: 100%;
+      padding: 6px 0;
+    }
+
+    .search-pill-input::placeholder {
+      color: #94A3B8;
+    }
+
+    
     .table-card {
-      background: #ffffff;
+      background: #FFFFFF;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       overflow: hidden;
@@ -403,7 +632,7 @@
     }
 
     .table-wrap {
-      overflow-x: hidden;
+      overflow-x: auto;
       width: 100%;
     }
 
@@ -416,12 +645,14 @@
     }
 
     th {
-      background: #f8fafc;
-      font-weight: 600;
-      color: #475569;
-      font-size: 11.5px;
-      letter-spacing: 0.02em;
-      padding: 10px 10px;
+      background: #F8FAFC;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: #64748B;
+      font-size: 10.5px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 12px 12px;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
       line-height: 1.3;
@@ -430,24 +661,31 @@
     }
 
     td {
-      padding: 10px 10px;
-      border-bottom: 1px solid var(--border);
-      color: #1e293b;
+      padding: 11px 12px;
+      border-bottom: 1px solid #F1F5F9;
+      color: #334155;
       white-space: nowrap;
       line-height: 1.35;
       text-align: center;
       vertical-align: middle;
+      font-weight: 500;
+      transition: background-color 0.15s ease;
     }
 
     .pk-cell {
       font-weight: 800 !important;
-      color: #0f172a !important;
+      color: #09090B !important;
     }
 
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f8fafc; }
+    tr:last-child td {
+      border-bottom: none;
+    }
 
-    /* Forms & Curvy Inputs with Generous Right Padding */
+    tr:hover td {
+      background: var(--purple-light);
+    }
+
+    
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -462,123 +700,154 @@
     }
 
     .form-group label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #475569;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #64748B;
     }
 
     .form-input {
-      font-family: inherit;
-      font-size: 13.5px;
-      padding: 11px 16px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 16px;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      background: #ffffff;
-      color: var(--text);
+      background: #FFFFFF;
+      color: var(--text-main);
       outline: none;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
       width: 100%;
     }
 
     .form-input:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px var(--primary-glow);
+      border-color: #09090B;
     }
 
-    /* Select Dropdowns with Outside Chevron Arrow */
+    
     select.form-input {
-      padding: 11px 42px 11px 16px;
+      padding: 10px 42px 10px 16px;
       appearance: none;
       -webkit-appearance: none;
-      background-color: #ffffff;
+      background-color: #FFFFFF;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 14px center;
-      background-size: 16px 16px;
+      background-size: 15px 15px;
       cursor: pointer;
     }
 
     select.form-input:invalid,
     select.form-input option[value=""] {
-      color: #94a3b8;
+      color: #94A3B8;
     }
 
-    /* Curvy Pill Buttons */
-    .btn {
-      font-family: inherit;
-      font-size: 13px;
+    
+    .filter-tab-btn {
+      font-family: var(--font-body);
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      font-size: 11.5px;
       font-weight: 600;
-      padding: 10px 24px;
+      color: var(--text-muted);
+      padding: 6px 16px;
       border-radius: var(--radius-pill);
-      border: none;
       cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .filter-tab-btn:hover {
+      color: #09090B;
+      background: #F4F4F5;
+      border-color: #D4D4D8;
+    }
+
+    .filter-tab-btn.active {
+      color: #FFFFFF;
+      background: #09090B;
+      border-color: #09090B;
+      font-weight: 700;
+    }
+
+    .query-pills-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      padding: 6px 0;
+      background: transparent;
+      border: none;
+    }
+
+    .query-btn {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.18s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      white-space: nowrap;
+      min-width: 44px;
+      user-select: none;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
+    .query-btn:hover {
+      color: #09090B;
+      border-color: #D4D4D8;
+      background: #F4F4F5;
     }
 
-    .btn-primary {
-      background: #7c3aed;
-      color: white;
-      box-shadow: 0 4px 14px var(--primary-glow);
+    .query-btn.active {
+      background: #09090B;
+      color: #FFFFFF;
+      border-color: #09090B;
+      font-weight: 700;
     }
 
-    .btn-emerald {
-      background: #059669;
-      color: white;
-      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
-    }
-
-    .btn-subtle {
-      background: #f1f5f9;
-      color: #475569;
-    }
-
-    .btn-subtle:hover {
-      background: #e2e8f0;
-      color: #0f172a;
-    }
-
-    /* VS CODE THEME CODE VIEWER (Dark Background, Colorful Syntax) */
+    
     .vscode-box {
-      background: #1e1e1e;
-      color: #d4d4d4;
+      background: #18181B;
+      color: #E4E4E7;
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 12.5px;
       line-height: 1.6;
       padding: 16px 20px;
       border-radius: var(--radius-md);
-      border: 1px solid #333333;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+      border: 1px solid #27272A;
       white-space: pre-wrap;
       word-break: break-all;
     }
 
     .log-item {
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-radius: var(--radius-md);
-      background: #ffffff;
+      background: #FFFFFF;
       border: 1px solid var(--border);
       margin-bottom: 12px;
-      transition: all 0.2s ease;
+      transition: border-color 0.18s ease;
+    }
+
+    .log-item:hover {
+      border-color: var(--purple-border);
     }
 
     .log-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    /* 100% Width & Tall SQL Terminal */
     .sql-terminal-wrap {
       width: 100%;
       margin-bottom: 20px;
@@ -586,44 +855,46 @@
 
     .sql-textarea {
       width: 100%;
-      height: 260px;
-      min-height: 220px;
+      height: 240px;
+      min-height: 200px;
       font-family: var(--font-mono);
-      font-size: 13.5px;
-      padding: 16px 20px;
-      border: 1px solid #333333;
+      font-size: 13px;
+      padding: 18px 22px;
+      border: 1px solid #27272A;
       border-radius: var(--radius-md);
-      background: #1e1e1e;
-      color: #9cdcfe;
+      background: #18181B;
+      color: #E9D5FF;
       outline: none;
       resize: vertical;
       line-height: 1.6;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
     }
 
     .sql-textarea:focus {
-      border-color: #569cd6;
-      box-shadow: 0 0 0 3px rgba(86, 156, 214, 0.25);
+      border-color: var(--purple-accent);
     }
 
-    /* Toast Notification */
+    
     .toast {
       position: fixed;
       bottom: 28px;
       right: 28px;
-      background: #0f172a;
-      border: 1px solid #334155;
-      padding: 14px 24px;
+      background: #18181B;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 12px 22px;
       border-radius: var(--radius-pill);
-      color: white;
-      font-size: 13px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 600;
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(16px);
+      transition: all 0.28s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 1000;
       pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .toast.show {
@@ -631,69 +902,98 @@
       transform: translateY(0);
     }
 
-    /* Split Grid */
-    .split-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
+    
     @media (max-width: 1024px) {
-      .metrics-bar { flex-wrap: wrap; }
+      .metrics-bar { flex-wrap: wrap; gap: 16px 0; }
+      .metric-divider { display: none; }
+      .metric-item { flex: 1 1 33.33%; }
       .split-grid { grid-template-columns: 1fr; }
     }
 
+    @media (max-width: 992px) {
+      .header-inner { padding: 10px 20px; flex-wrap: wrap; gap: 10px; }
+      .header-center-nav { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; padding-top: 4px; }
+      .sub-nav-group { justify-content: flex-start; }
+      .container { padding: 0 20px; }
+    }
+
     @media (max-width: 768px) {
-      header { padding: 12px 16px; }
-      .sub-menu { padding: 0 10px; justify-content: flex-start; height: 48px; }
-      .sub-menu .sub-tab-btn { padding: 0 14px; font-size: 12.5px; }
-      .container { padding: 0 16px; }
+      .metric-item { flex: 1 1 50%; }
+      .search-pill-wrapper { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation Header (Left: Title, Right: Minimalist Slider) -->
+  
+  
+  
+  
+  
+  
   <header>
-    <div class="brand-wrap">
-      <h1>College Management System</h1>
-    </div>
+    <div class="header-inner">
+      
+      <div class="header-left-group">
+        <a href="/" class="brand-link" title="CampusCore Management System">
+          <span class="brand-logo">
+            <span class="logo-main">campus</span><span class="logo-accent">core</span>
+          </span>
+        </a>
+      </div>
 
-    <!-- Minimalist Sliding Segment Switcher on the Right Side (Frameless, Smooth Slide) -->
-    <div class="nav-switcher">
-      <div class="nav-slider-indicator" id="navSliderThumb"></div>
-      <button id="btnSwitchDash" class="nav-switcher-btn active" onclick="switchView('management')">
-        College Management
-      </button>
-      <button id="btnSwitchDb" class="nav-switcher-btn" onclick="switchView('database')">
-        Database Operations
-      </button>
+      
+      <div class="header-center-nav">
+        
+        <nav id="header-nav-mgmt" class="sub-nav-group">
+          <button class="sub-tab-btn active" onclick="switchMgmtTab('students', this)">Students & Admissions</button>
+          <button class="sub-tab-btn" onclick="switchMgmtTab('faculty', this)">Faculty & Departments</button>
+          <button class="sub-tab-btn" onclick="switchMgmtTab('courses', this)">Curriculum & Offerings</button>
+          <button class="sub-tab-btn" onclick="switchMgmtTab('enrollments', this)">Course Registrations</button>
+          <button class="sub-tab-btn" onclick="switchMgmtTab('exams', this)">Examinations & Grading</button>
+          <button class="sub-tab-btn" onclick="switchMgmtTab('fees', this)">Fee Payments</button>
+        </nav>
+
+        
+        <nav id="header-nav-db" class="sub-nav-group" style="display: none;">
+          <button class="sub-tab-btn active" onclick="switchDbTab('tables', this)">Database Tables</button>
+          <button class="sub-tab-btn" onclick="switchDbTab('tracer', this)">Real-time Query Tracer</button>
+          <button class="sub-tab-btn" onclick="switchDbTab('queries', this)">SQL Queries</button>
+          <button class="sub-tab-btn" onclick="switchDbTab('cursor', this)">Academic Audit (Cursor)</button>
+        </nav>
+      </div>
+
+      
+      <div class="header-right-group">
+        <button id="viewToggleBtn" class="view-toggle-pill" onclick="toggleView()" title="Click to toggle between Management and Database views">
+          <div class="monogram-avatar" id="viewToggleMonogram">
+            <svg class="monogram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+          <div class="user-meta">
+            <div class="user-name" id="viewToggleTitle">Management</div>
+            <div class="user-role" id="viewToggleSubtitle">Click for Database ↗</div>
+          </div>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- ===================================================================== -->
-  <!-- SEGMENT 1: COLLEGE MANAGEMENT (The Complete Institutional Platform)   -->
-  <!-- ===================================================================== -->
+  
+  
+  
   <div id="view-management" class="view-container">
     
-    <!-- Centered Sub-Navigation Menu Bar -->
-    <nav class="sub-menu">
-      <button class="sub-tab-btn active" onclick="switchMgmtTab('students')">Students & Admissions</button>
-      <button class="sub-tab-btn" onclick="switchMgmtTab('faculty')">Faculty & Departments</button>
-      <button class="sub-tab-btn" onclick="switchMgmtTab('courses')">Curriculum & Offerings</button>
-      <button class="sub-tab-btn" onclick="switchMgmtTab('enrollments')">Course Registrations</button>
-      <button class="sub-tab-btn" onclick="switchMgmtTab('exams')">Examinations & Grading</button>
-      <button class="sub-tab-btn" onclick="switchMgmtTab('fees')">Fee Payments</button>
-    </nav>
-
     <div class="container">
 
-      <!-- Metrics Bar: Single Row / Container Separated by Vertical Lines -->
+      
       <div class="metrics-bar">
         <div class="metric-item">
           <div class="stat-label">Enrolled Students</div>
           <div class="stat-value" id="statStudents">-</div>
-          <div class="stat-hint">Active Student Body</div>
+          <div class="stat-hint">Active Students</div>
         </div>
         <div class="metric-divider"></div>
         <div class="metric-item">
@@ -727,18 +1027,23 @@
         </div>
       </div>
 
-      <!-- MGMT TAB 1: STUDENTS & ADMISSIONS -->
+      
       <div id="mgmt-students" class="mgmt-pane">
         
-        <!-- Student Directory Card -->
+        
         <div class="card">
           <div class="card-header">
             <div>
               <div class="card-title">Student Directory</div>
               <div class="card-subtitle">Manage student enrollments, academic status, and departmental allocations</div>
             </div>
-            <div style="display: flex; gap: 12px; align-items: center;">
-              <input type="text" id="studentSearch" class="form-input" style="width: 240px; padding: 9px 16px;" placeholder="Search students..." oninput="filterStudentsTable()">
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <div class="search-pill-wrapper">
+                <svg class="search-pill-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="studentSearch" class="search-pill-input" placeholder="Search by name, reg no, department..." oninput="filterStudentsTable()">
+              </div>
               <button class="btn btn-subtle" onclick="loadMetadata()">Refresh</button>
             </div>
           </div>
@@ -762,10 +1067,10 @@
           </div>
         </div>
 
-        <!-- Student Admission & Lookup Grid -->
+        
         <div class="split-grid">
           
-          <!-- Admission Form -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -777,19 +1082,19 @@
               <div class="form-grid">
                 <div class="form-group">
                   <label>Registration Number</label>
-                  <input type="text" id="admRegNo" class="form-input" placeholder="e.g. REG_13" required>
+                  <input type="text" id="admRegNo" class="form-input" placeholder="e.g. 23BCE1042" required>
                 </div>
                 <div class="form-group">
                   <label>First Name</label>
-                  <input type="text" id="admFirstName" class="form-input" placeholder="Student" required>
+                  <input type="text" id="admFirstName" class="form-input" placeholder="Aarav" required>
                 </div>
                 <div class="form-group">
                   <label>Last Name</label>
-                  <input type="text" id="admLastName" class="form-input" placeholder="13" required>
+                  <input type="text" id="admLastName" class="form-input" placeholder="Sharma" required>
                 </div>
                 <div class="form-group">
                   <label>Email Address</label>
-                  <input type="email" id="admEmail" class="form-input" placeholder="student13@college.edu" required>
+                  <input type="email" id="admEmail" class="form-input" placeholder="aarav.s2023@vitstudent.ac.in" required>
                 </div>
                 <div class="form-group">
                   <label>Phone Number</label>
@@ -820,7 +1125,7 @@
             </form>
           </div>
 
-          <!-- Academic & Fee Lookup -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -833,21 +1138,21 @@
               <select id="lookupStudentSelect" class="form-input" onchange="runStudentLookup()"></select>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;" id="lookupResultBox">
-              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Cumulative GPA</div>
-                <div style="font-size: 24px; font-weight: 800; color: #7c3aed; margin-top: 4px;" id="lookupGpa">--</div>
+              <div style="background: #FFFFFF; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Cumulative GPA</div>
+                <div style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: var(--purple-dark); margin-top: 4px;" id="lookupGpa">--</div>
               </div>
-              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Earned Credits</div>
-                <div style="font-size: 24px; font-weight: 800; color: var(--text); margin-top: 4px;" id="lookupCredits">--</div>
+              <div style="background: #FFFFFF; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Earned Credits</div>
+                <div style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; color: #09090B; margin-top: 4px;" id="lookupCredits">--</div>
               </div>
-              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Total Fees Paid</div>
-                <div style="font-size: 20px; font-weight: 800; color: #059669; margin-top: 4px;" id="lookupPaid">--</div>
+              <div style="background: #FFFFFF; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Total Fees Paid</div>
+                <div style="font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: var(--purple-brand); margin-top: 4px;" id="lookupPaid">--</div>
               </div>
-              <div style="background: #f8fafc; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Pending Dues</div>
-                <div style="font-size: 20px; font-weight: 800; color: #d97706; margin-top: 4px;" id="lookupDues">--</div>
+              <div style="background: #FFFFFF; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Pending Dues</div>
+                <div style="font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: var(--amber); margin-top: 4px;" id="lookupDues">--</div>
               </div>
             </div>
           </div>
@@ -856,10 +1161,10 @@
 
       </div>
 
-      <!-- MGMT TAB 2: FACULTY & DEPARTMENTS -->
+      
       <div id="mgmt-faculty" class="mgmt-pane" style="display: none;">
         
-        <!-- Faculty Directory Card -->
+        
         <div class="card">
           <div class="card-header">
             <div>
@@ -889,7 +1194,7 @@
 
         <div class="split-grid">
           
-          <!-- Appoint Faculty Form -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -901,15 +1206,15 @@
               <div class="form-grid">
                 <div class="form-group">
                   <label>First Name</label>
-                  <input type="text" id="facFirstName" class="form-input" placeholder="Faculty" required>
+                  <input type="text" id="facFirstName" class="form-input" placeholder="S." required>
                 </div>
                 <div class="form-group">
                   <label>Last Name</label>
-                  <input type="text" id="facLastName" class="form-input" placeholder="11" required>
+                  <input type="text" id="facLastName" class="form-input" placeholder="Rajalakshmi" required>
                 </div>
                 <div class="form-group">
                   <label>Email Address</label>
-                  <input type="email" id="facEmail" class="form-input" placeholder="faculty11@college.edu" required>
+                  <input type="email" id="facEmail" class="form-input" placeholder="s.rajalakshmi@vit.ac.in" required>
                 </div>
                 <div class="form-group">
                   <label>Phone Number</label>
@@ -939,7 +1244,7 @@
             </form>
           </div>
 
-          <!-- Academic Departments List & Add -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -968,22 +1273,22 @@
               <div class="form-grid">
                 <div class="form-group">
                   <label>Department Code</label>
-                  <input type="text" id="deptCode" class="form-input" placeholder="e.g. DEP_11" required>
+                  <input type="text" id="deptCode" class="form-input" placeholder="e.g. SCOPE" required>
                 </div>
                 <div class="form-group">
                   <label>Department Name</label>
-                  <input type="text" id="deptName" class="form-input" placeholder="e.g. Department 11" required>
+                  <input type="text" id="deptName" class="form-input" placeholder="e.g. School of Computer Science" required>
                 </div>
                 <div class="form-group">
                   <label>Building Block</label>
-                  <input type="text" id="deptBuilding" class="form-input" placeholder="e.g. Block I" required>
+                  <input type="text" id="deptBuilding" class="form-input" placeholder="e.g. SJT Block" required>
                 </div>
                 <div class="form-group">
                   <label>Annual Budget</label>
                   <input type="number" id="deptBudget" class="form-input" min="100000" value="2500000" required>
                 </div>
               </div>
-              <button type="submit" class="btn btn-emerald">Create Department</button>
+              <button type="submit" class="btn btn-purple">Create Department</button>
             </form>
           </div>
 
@@ -991,10 +1296,10 @@
 
       </div>
 
-      <!-- MGMT TAB 3: CURRICULUM & OFFERINGS -->
+      
       <div id="mgmt-courses" class="mgmt-pane" style="display: none;">
         
-        <!-- Master Course Catalog -->
+        
         <div class="card">
           <div class="card-header">
             <div>
@@ -1024,7 +1329,7 @@
 
         <div class="split-grid">
           
-          <!-- Register New Course -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -1036,11 +1341,11 @@
               <div class="form-grid">
                 <div class="form-group">
                   <label>Course Code</label>
-                  <input type="text" id="crsCode" class="form-input" placeholder="e.g. CRS_11" required>
+                  <input type="text" id="crsCode" class="form-input" placeholder="e.g. CSE3001" required>
                 </div>
                 <div class="form-group">
                   <label>Course Title</label>
-                  <input type="text" id="crsTitle" class="form-input" placeholder="e.g. Course 11" required>
+                  <input type="text" id="crsTitle" class="form-input" placeholder="e.g. Database Management Systems" required>
                 </div>
                 <div class="form-group">
                   <label>Credits</label>
@@ -1064,7 +1369,7 @@
             </form>
           </div>
 
-          <!-- Schedule Course Offering Section -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -1099,13 +1404,13 @@
                   <input type="number" id="offCap" class="form-input" min="10" max="120" value="60" required>
                 </div>
               </div>
-              <button type="submit" class="btn btn-emerald">Schedule Section</button>
+              <button type="submit" class="btn btn-purple">Schedule Section</button>
             </form>
           </div>
 
         </div>
 
-        <!-- Scheduled Course Sections Table -->
+        
         <div class="card" style="margin-top: 24px;">
           <div class="card-header">
             <div>
@@ -1135,10 +1440,10 @@
 
       </div>
 
-      <!-- MGMT TAB 4: COURSE REGISTRATIONS -->
+      
       <div id="mgmt-enrollments" class="mgmt-pane" style="display: none;">
         
-        <!-- Enroll Student Form Card -->
+        
         <div class="card">
           <div class="card-header">
             <div>
@@ -1161,7 +1466,7 @@
           </form>
         </div>
 
-        <!-- Active Registrations Table -->
+        
         <div class="card">
           <div class="card-header">
             <div>
@@ -1191,10 +1496,10 @@
 
       </div>
 
-      <!-- MGMT TAB 5: EXAMINATIONS & GRADING -->
+      
       <div id="mgmt-exams" class="mgmt-pane" style="display: none;">
         
-        <!-- Record Exam Marks Form -->
+        
         <div class="card">
           <div class="card-header">
             <div>
@@ -1221,7 +1526,7 @@
           </form>
         </div>
 
-        <!-- Examination Results Gradebook -->
+        
         <div class="card">
           <div class="card-header">
             <div>
@@ -1252,12 +1557,12 @@
 
       </div>
 
-      <!-- MGMT TAB 6: FEE PAYMENTS -->
+      
       <div id="mgmt-fees" class="mgmt-pane" style="display: none;">
         
         <div class="split-grid">
           
-          <!-- Process Fee Payment Form -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -1294,7 +1599,7 @@
             </form>
           </div>
 
-          <!-- Quick Dues Calculator Card -->
+          
           <div class="card">
             <div class="card-header">
               <div>
@@ -1306,26 +1611,26 @@
               <label>Select Student</label>
               <select id="duesCheckSelect" class="form-input" onchange="runDuesCheck()"></select>
             </div>
-            <div style="background: #f8fafc; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <div style="background: #FFFFFF; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
               <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span style="color: var(--text-muted);">Standard Semester Tuition:</span>
-                <strong>1,50,000.00</strong>
+                <span style="color: var(--text-muted); font-size: 12px; font-weight: 500;">Standard Semester Tuition:</span>
+                <strong style="font-family: var(--font-heading); font-weight: 700; color: #09090B;">1,50,000.00</strong>
               </div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span style="color: var(--text-muted);">Total Fees Paid:</span>
-                <strong style="color: #059669;" id="duesCheckPaid">--</strong>
+                <span style="color: var(--text-muted); font-size: 12px; font-weight: 500;">Total Fees Paid:</span>
+                <strong style="color: var(--purple-brand); font-family: var(--font-heading); font-weight: 800;" id="duesCheckPaid">--</strong>
               </div>
-              <hr style="border: none; border-top: 1px solid var(--border); margin: 12px 0;">
-              <div style="display: flex; justify-content: space-between; font-size: 15px;">
-                <span style="font-weight: 700;">Remaining Balance Due:</span>
-                <strong style="color: #d97706;" id="duesCheckPending">--</strong>
+              <hr style="border: none; border-top: 1px solid var(--border); margin: 14px 0;">
+              <div style="display: flex; justify-content: space-between; font-size: 14px; align-items: baseline;">
+                <span style="font-weight: 700; color: #09090B;">Remaining Balance Due:</span>
+                <strong style="color: var(--amber); font-family: var(--font-heading); font-size: 18px; font-weight: 900;" id="duesCheckPending">--</strong>
               </div>
             </div>
           </div>
 
         </div>
 
-        <!-- Master Fee Payments Ledger -->
+        
         <div class="card" style="margin-top: 24px;">
           <div class="card-header">
             <div>
@@ -1359,29 +1664,20 @@
     </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- SEGMENT 2: DATABASE OPERATIONS (Inspector, Tables, Queries & Terminal)-->
-  <!-- ===================================================================== -->
+  
+  
+  
   <div id="view-database" class="view-container" style="display: none;">
     
-    <!-- Centered Sub-Navigation Menu Bar (Diagrams Tab Removed) -->
-    <nav class="sub-menu">
-      <button class="sub-tab-btn active" onclick="switchDbTab('tables')">8 Database Tables</button>
-      <button class="sub-tab-btn" onclick="switchDbTab('tracer')">Real-time Query Tracer</button>
-      <button class="sub-tab-btn" onclick="switchDbTab('queries')">16 SQL Queries</button>
-      <button class="sub-tab-btn" onclick="switchDbTab('console')">Live SQL Console</button>
-      <button class="sub-tab-btn" onclick="switchDbTab('cursor')">Academic Audit (Cursor)</button>
-    </nav>
-
     <div class="container">
 
-      <!-- DB Tab: 8 Tables -->
+      
       <div id="db-tables" class="db-pane">
         <div class="card">
           <div class="card-header">
             <div>
               <div class="card-title">Live Relational Tables</div>
-              <div class="card-subtitle">Examine rows, attributes, and constraints across all 8 tables</div>
+              <div class="card-subtitle">Examine rows, attributes, and constraints across all database tables</div>
             </div>
             <button class="btn btn-subtle" onclick="loadCurrentTable()">Refresh</button>
           </div>
@@ -1408,7 +1704,7 @@
         </div>
       </div>
 
-      <!-- DB Tab: Real-Time Query Tracer -->
+      
       <div id="db-tracer" class="db-pane" style="display: none;">
         <div class="card">
           <div class="card-header">
@@ -1422,18 +1718,18 @@
         </div>
       </div>
 
-      <!-- DB Tab: 16 Queries (VS Code Dark Theme Syntax) -->
+      
       <div id="db-queries" class="db-pane" style="display: none;">
         <div class="card">
           <div class="card-header">
             <div>
-              <div class="card-title">16 SQL Analytical Queries</div>
+              <div class="card-title">SQL Analytical Queries</div>
               <div class="card-subtitle">Standard analytical queries: Joins, Subqueries, Group By, and Aggregations</div>
             </div>
           </div>
           <div class="query-pills-bar" id="queryPills"></div>
           <div style="margin-top: 6px; margin-bottom: 20px;">
-            <div style="font-weight: 700; font-size: 14.5px; margin-bottom: 8px; color: #0f172a;" id="qTitle">Select a query above</div>
+            <div style="font-family: var(--font-heading); font-weight: 800; font-size: 14.5px; margin-bottom: 8px; color: #09090B;" id="qTitle">Select a query above</div>
             <div class="vscode-box" id="qSql">-- SQL query will appear here</div>
           </div>
           <div class="table-card">
@@ -1447,31 +1743,7 @@
         </div>
       </div>
 
-      <!-- DB Tab: Live SQL Console (VS Code Dark Style, 100% Full Width) -->
-      <div id="db-console" class="db-pane" style="display: none;">
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Interactive SQL Terminal</div>
-              <div class="card-subtitle">Execute raw SQL queries directly on the SQLite database engine</div>
-            </div>
-            <button class="btn btn-emerald" onclick="runRawSql()">Execute Query</button>
-          </div>
-          <div class="sql-terminal-wrap">
-            <textarea id="rawSql" class="sql-textarea" placeholder="SELECT * FROM STUDENT WHERE status = 'Active';"></textarea>
-          </div>
-          <div class="table-card">
-            <div class="table-wrap">
-              <table>
-                <thead><tr id="rawH"></tr></thead>
-                <tbody id="rawB"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DB Tab: Cursor -->
+      
       <div id="db-cursor" class="db-pane" style="display: none;">
         <div class="card">
           <div class="card-header">
@@ -1481,10 +1753,10 @@
             </div>
             <button class="btn btn-primary" onclick="loadAuditReport()">Run Audit</button>
           </div>
-          <div style="display: flex; gap: 24px; margin-bottom: 18px; padding: 14px 20px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border);">
-            <div>Total Evaluated: <strong id="auditTotal">-</strong></div>
-            <div>Dean's List: <strong id="auditHonors" style="color: #7c3aed;">-</strong></div>
-            <div>First Class: <strong id="auditFirst" style="color: #059669;">-</strong></div>
+          <div style="display: flex; gap: 24px; margin-bottom: 18px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); flex-wrap: wrap; font-size: 13px;">
+            <div>Total Evaluated: <strong id="auditTotal" style="color: #09090B; font-weight: 800;">-</strong></div>
+            <div>Dean's List: <strong id="auditHonors" style="color: var(--purple-brand); font-weight: 800;">-</strong></div>
+            <div>First Class: <strong id="auditFirst" style="color: var(--purple-accent); font-weight: 800;">-</strong></div>
           </div>
           <div class="table-card">
             <div class="table-wrap">
@@ -1509,7 +1781,7 @@
     </div>
   </div>
 
-  <!-- Toast Notification -->
+  
   <div id="toast" class="toast"></div>
 
   <script>
@@ -1517,12 +1789,34 @@
     let currentTable = 'STUDENT';
     let metaCache = {};
 
-    function syncNavSlider() {
-      const thumb = document.getElementById('navSliderThumb');
-      const activeBtn = document.querySelector('.nav-switcher-btn.active');
-      if (thumb && activeBtn) {
-        thumb.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
-        thumb.style.width = `${activeBtn.offsetWidth}px`;
+    function toggleView() {
+      const nextView = activeView === 'management' ? 'database' : 'management';
+      switchView(nextView);
+    }
+
+    function updateTogglePill() {
+      const titleEl = document.getElementById('viewToggleTitle');
+      const subEl = document.getElementById('viewToggleSubtitle');
+      const monogramEl = document.getElementById('viewToggleMonogram');
+      if (!titleEl || !subEl || !monogramEl) return;
+
+      if (activeView === 'management') {
+        titleEl.innerText = 'Management';
+        subEl.innerText = 'Click for Database ↗';
+        monogramEl.innerHTML = `
+          <svg class="monogram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>`;
+      } else {
+        titleEl.innerText = 'Database';
+        subEl.innerText = 'Click for Management ↗';
+        monogramEl.innerHTML = `
+          <svg class="monogram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>`;
       }
     }
 
@@ -1530,40 +1824,46 @@
       activeView = view;
       const vMgmt = document.getElementById('view-management');
       const vDb = document.getElementById('view-database');
-      const btnDash = document.getElementById('btnSwitchDash');
-      const btnDb = document.getElementById('btnSwitchDb');
+      const navMgmt = document.getElementById('header-nav-mgmt');
+      const navDb = document.getElementById('header-nav-db');
 
       if (view === 'management') {
         vMgmt.style.display = 'block';
         vDb.style.display = 'none';
-        btnDash.classList.add('active');
-        btnDb.classList.remove('active');
-        syncNavSlider();
+        if (navMgmt) navMgmt.style.display = 'flex';
+        if (navDb) navDb.style.display = 'none';
+        updateTogglePill();
         loadStats();
         loadMetadata();
       } else {
         vMgmt.style.display = 'none';
         vDb.style.display = 'block';
-        btnDash.classList.remove('active');
-        btnDb.classList.add('active');
-        syncNavSlider();
+        if (navMgmt) navMgmt.style.display = 'none';
+        if (navDb) navDb.style.display = 'flex';
+        updateTogglePill();
         loadCurrentTable();
         loadTelemetry();
         loadQueryPills();
       }
     }
 
-    function switchMgmtTab(tabId) {
-      document.querySelectorAll('#view-management .sub-tab-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+    function switchMgmtTab(tabId, el) {
+      document.querySelectorAll('#header-nav-mgmt .sub-tab-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = el || (window.event && window.event.currentTarget) || (window.event && window.event.target);
+      if (activeBtn && activeBtn.classList) {
+        activeBtn.classList.add('active');
+      }
       document.querySelectorAll('.mgmt-pane').forEach(p => p.style.display = 'none');
       const target = document.getElementById('mgmt-' + tabId);
       if (target) target.style.display = 'block';
     }
 
-    function switchDbTab(tabId) {
-      document.querySelectorAll('#view-database .sub-tab-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+    function switchDbTab(tabId, el) {
+      document.querySelectorAll('#header-nav-db .sub-tab-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = el || (window.event && window.event.currentTarget) || (window.event && window.event.target);
+      if (activeBtn && activeBtn.classList) {
+        activeBtn.classList.add('active');
+      }
       document.querySelectorAll('.db-pane').forEach(p => p.style.display = 'none');
       const target = document.getElementById('db-' + tabId);
       if (target) target.style.display = 'block';
@@ -1576,17 +1876,12 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    // --- VS CODE SYNTAX HIGHLIGHTER ---
     function formatVsCodeSql(sql) {
       if (!sql) return '';
       let s = sql.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      // Comments
-      s = s.replace(/(--[^\r\n]*)/g, '<span style="color: #6a9955; font-style: italic;">$1</span>');
-      // Strings
-      s = s.replace(/('([^'\\]|\\.)*')/g, '<span style="color: #ce9178;">$1</span>');
-      // Numbers
-      s = s.replace(/\b(\d+(\.\d+)?)\b/g, '<span style="color: #b5cea8;">$1</span>');
-      // Keywords
+      s = s.replace(/(--[^\r\n]*)/g, '<span style="color: #71717A; font-style: italic;">$1</span>');
+      s = s.replace(/('([^'\\]|\\.)*')/g, '<span style="color: #FCD34D;">$1</span>');
+      s = s.replace(/\b(\d+(\.\d+)?)\b/g, '<span style="color: #F472B6;">$1</span>');
       const keywords = [
         'SELECT', 'FROM', 'WHERE', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 'FULL JOIN',
         'GROUP BY', 'ORDER BY', 'HAVING', 'INSERT INTO', 'INSERT', 'UPDATE', 'DELETE',
@@ -1597,18 +1892,16 @@
       ];
       const kwRegex = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'gi');
       s = s.replace(kwRegex, function(m) {
-        return '<span style="color: #569cd6; font-weight: 600;">' + m.toUpperCase() + '</span>';
+        return '<span style="color: #38BDF8; font-weight: 700;">' + m.toUpperCase() + '</span>';
       });
-      // Tables
       const tables = ['STUDENT', 'FACULTY', 'DEPARTMENT', 'COURSE', 'COURSE_OFFERING', 'ENROLLMENT', 'EXAM_RESULT', 'FEE_PAYMENT'];
       const tblRegex = new RegExp('\\b(' + tables.join('|') + ')\\b', 'gi');
       s = s.replace(tblRegex, function(m) {
-        return '<span style="color: #4ec9b0; font-weight: 600;">' + m.toUpperCase() + '</span>';
+        return '<span style="color: #C084FC; font-weight: 700;">' + m.toUpperCase() + '</span>';
       });
       return s;
     }
 
-    // --- DATA LOADERS ---
     async function loadStats() {
       try {
         const res = await fetch('/api/stats');
@@ -1643,7 +1936,6 @@
     }
 
     function populateDropdowns() {
-      // Departments
       const deptOpts = '<option value="" disabled selected>-- Select Department --</option>' + (metaCache.departments || []).map(d => `<option value="${d.dept_id}">${d.dept_name} (${d.dept_code})</option>`).join('');
       const admDept = document.getElementById('admDept');
       const facDept = document.getElementById('facDept');
@@ -1652,7 +1944,6 @@
       if (facDept) facDept.innerHTML = deptOpts;
       if (crsDept) crsDept.innerHTML = deptOpts;
 
-      // Students
       const stdOpts = '<option value="" disabled selected>-- Select Student --</option>' + (metaCache.students || []).map(s => `<option value="${s.student_id}">${s.full_name} (${s.reg_no})</option>`).join('');
       const enrStd = document.getElementById('enrStudent');
       const feeStd = document.getElementById('feeStudent');
@@ -1660,25 +1951,34 @@
       const duesStd = document.getElementById('duesCheckSelect');
       if (enrStd) enrStd.innerHTML = stdOpts;
       if (feeStd) feeStd.innerHTML = stdOpts;
-      if (lookStd) lookStd.innerHTML = stdOpts;
+      if (lookStd) {
+        if (metaCache.students && metaCache.students.length > 0) {
+          const currentVal = lookStd.value;
+          lookStd.innerHTML = metaCache.students.map(s => `<option value="${s.student_id}">${s.full_name} (${s.reg_no})</option>`).join('');
+          if (currentVal && metaCache.students.some(s => String(s.student_id) === String(currentVal))) {
+            lookStd.value = currentVal;
+          } else {
+            lookStd.value = metaCache.students[0].student_id;
+          }
+          runStudentLookup();
+        } else {
+          lookStd.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
+        }
+      }
       if (duesStd) duesStd.innerHTML = stdOpts;
 
-      // Offerings
       const offOpts = '<option value="" disabled selected>-- Select Offering Section --</option>' + (metaCache.offerings || []).map(o => `<option value="${o.offering_id}">#${o.offering_id} ${o.course_code} - ${o.course_title} (Available: ${o.available_seats}/${o.max_capacity})</option>`).join('');
       const enrOff = document.getElementById('enrOffering');
       if (enrOff) enrOff.innerHTML = offOpts;
 
-      // Courses for scheduling offering
       const crsOpts = '<option value="" disabled selected>-- Select Course --</option>' + (metaCache.courses || []).map(c => `<option value="${c.course_id}">${c.course_code} - ${c.course_title} (${c.credits} Credits)</option>`).join('');
       const offCrs = document.getElementById('offCourse');
       if (offCrs) offCrs.innerHTML = crsOpts;
 
-      // Faculty for scheduling offering
       const facOpts = '<option value="" disabled selected>-- Select Instructor --</option>' + (metaCache.faculty || []).map(f => `<option value="${f.faculty_id}">${f.faculty_name} (${f.designation})</option>`).join('');
       const offFac = document.getElementById('offFaculty');
       if (offFac) offFac.innerHTML = facOpts;
 
-      // Enrollments for Exam Grading
       const enrExamOpts = '<option value="" disabled selected>-- Select Course Enrollment --</option>' + (metaCache.enrollments || []).map(e => `<option value="${e.enrollment_id}">Enrollment #${e.enrollment_id}: ${e.student_name} (${e.reg_no}) - ${e.course_code}</option>`).join('');
       const examEnr = document.getElementById('examEnrollment');
       if (examEnr) examEnr.innerHTML = enrExamOpts;
@@ -1689,9 +1989,9 @@
       if (!b) return;
       b.innerHTML = list.map(s => `
         <tr>
-          <td><strong>#${s.student_id}</strong></td>
+          <td><strong style="color: #09090B;">#${s.student_id}</strong></td>
           <td><span class="pill-badge pill-blue">${s.reg_no}</span></td>
-          <td>${s.full_name}</td>
+          <td style="font-weight: 700; color: #09090B;">${s.full_name}</td>
           <td>${s.dept_name || s.dept_code}</td>
           <td>Sem ${s.current_semester}</td>
           <td>${s.email}</td>
@@ -1753,12 +2053,12 @@
       if (!b) return;
       b.innerHTML = list.map(f => `
         <tr>
-          <td><strong>#${f.faculty_id}</strong></td>
-          <td><strong>${f.faculty_name}</strong></td>
-          <td><span class="pill-badge pill-purple">${f.designation}</span></td>
+          <td><strong style="color: #09090B;">#${f.faculty_id}</strong></td>
+          <td style="font-weight: 700; color: #09090B;">${f.faculty_name}</td>
+          <td><span class="pill-badge pill-blue">${f.designation}</span></td>
           <td>${f.dept_code}</td>
           <td>${f.email}</td>
-          <td>${Number(f.salary).toLocaleString('en-IN')}</td>
+          <td style="font-weight: 600;">${Number(f.salary).toLocaleString('en-IN')}</td>
         </tr>
       `).join('');
     }
@@ -1768,11 +2068,11 @@
       if (!b) return;
       b.innerHTML = list.map(d => `
         <tr>
-          <td><strong>#${d.dept_id}</strong></td>
+          <td><strong style="color: #09090B;">#${d.dept_id}</strong></td>
           <td><span class="pill-badge pill-blue">${d.dept_code}</span></td>
-          <td>${d.dept_name}</td>
+          <td style="font-weight: 700; color: #09090B;">${d.dept_name}</td>
           <td>${d.building}</td>
-          <td>${Number(d.budget).toLocaleString('en-IN')}</td>
+          <td style="font-weight: 600;">${Number(d.budget).toLocaleString('en-IN')}</td>
         </tr>
       `).join('');
     }
@@ -1782,10 +2082,10 @@
       if (!b) return;
       b.innerHTML = list.map(c => `
         <tr>
-          <td><strong>#${c.course_id}</strong></td>
+          <td><strong style="color: #09090B;">#${c.course_id}</strong></td>
           <td><span class="pill-badge pill-blue">${c.course_code}</span></td>
-          <td>${c.course_title}</td>
-          <td>${c.credits} Credits</td>
+          <td style="font-weight: 700; color: #09090B;">${c.course_title}</td>
+          <td><strong style="color: #09090B; font-weight: 800;">${c.credits} Credits</strong></td>
           <td><span class="pill-badge pill-gray">${c.course_level}</span></td>
           <td>${c.dept_name || c.dept_code}</td>
         </tr>
@@ -1797,9 +2097,9 @@
       if (!b) return;
       b.innerHTML = list.map(o => `
         <tr>
-          <td><strong>#${o.offering_id}</strong></td>
+          <td><strong style="color: #09090B;">#${o.offering_id}</strong></td>
           <td><span class="pill-badge pill-blue">${o.course_code} - ${o.course_title}</span></td>
-          <td>${o.instructor}</td>
+          <td style="font-weight: 700; color: #09090B;">${o.instructor}</td>
           <td>${o.academic_year} Sem ${o.semester}</td>
           <td>${o.classroom}</td>
           <td>${o.current_enrolled} / ${o.max_capacity}</td>
@@ -1813,9 +2113,9 @@
       if (!b) return;
       b.innerHTML = list.map(e => `
         <tr>
-          <td><strong>#${e.enrollment_id}</strong></td>
+          <td><strong style="color: #09090B;">#${e.enrollment_id}</strong></td>
           <td><span class="pill-badge pill-blue">${e.reg_no}</span></td>
-          <td>${e.student_name}</td>
+          <td style="font-weight: 700; color: #09090B;">${e.student_name}</td>
           <td>${e.course_code}</td>
           <td>${e.instructor}</td>
           <td><span class="pill-badge ${e.enrollment_status === 'Completed' ? 'pill-green' : 'pill-blue'}">${e.enrollment_status}</span></td>
@@ -1828,11 +2128,11 @@
       if (!b) return;
       b.innerHTML = list.map(r => `
         <tr>
-          <td><strong>#${r.result_id}</strong></td>
+          <td><strong style="color: #09090B;">#${r.result_id}</strong></td>
           <td><span class="pill-badge pill-blue">${r.reg_no}</span></td>
-          <td>${r.student_name}</td>
+          <td style="font-weight: 700; color: #09090B;">${r.student_name}</td>
           <td>${r.course_code}</td>
-          <td><strong>${r.marks_obtained}</strong></td>
+          <td><strong style="font-size: 13px; color: #09090B;">${r.marks_obtained}</strong></td>
           <td><span class="pill-badge ${r.grade === 'S' || r.grade === 'A' ? 'pill-green' : r.grade === 'B' ? 'pill-blue' : 'pill-amber'}">Grade ${r.grade}</span></td>
           <td>${r.remarks}</td>
         </tr>
@@ -1844,18 +2144,17 @@
       if (!b) return;
       b.innerHTML = list.map(p => `
         <tr>
-          <td><strong>#${p.payment_id}</strong></td>
+          <td><strong style="color: #09090B;">#${p.payment_id}</strong></td>
           <td><span class="pill-badge pill-blue">${p.reg_no}</span></td>
-          <td>${p.student_name}</td>
-          <td><strong>${Number(p.amount_paid).toLocaleString('en-IN')}</strong></td>
+          <td style="font-weight: 700; color: #09090B;">${p.student_name}</td>
+          <td><strong style="font-family: var(--font-heading);">${Number(p.amount_paid).toLocaleString('en-IN')}</strong></td>
           <td><span class="pill-badge pill-gray">${p.payment_method}</span></td>
-          <td><code>${p.transaction_ref || 'AUTO-REF'}</code></td>
+          <td><code style="font-family: var(--font-mono); font-size: 11px;">${p.transaction_ref || 'AUTO-REF'}</code></td>
           <td><span class="pill-badge pill-green">${p.payment_status}</span></td>
         </tr>
       `).join('');
     }
 
-    // --- FORM SUBMISSION HANDLERS ---
     async function handleStudentAdmission(e) {
       e.preventDefault();
       const payload = {
@@ -2069,7 +2368,6 @@
       }
     }
 
-    // --- DATABASE MANAGEMENT LOGIC ---
     function selectTable(tbl, btn) {
       currentTable = tbl;
       document.querySelectorAll('#db-tables .filter-tab-btn').forEach(b => b.classList.remove('active'));
@@ -2205,10 +2503,10 @@
           if (isFk) tags += '<span class="key-tag fk-tag">F.K</span>';
 
           const nameHtml = isPk
-            ? `<strong style="font-weight: 800; color: #0f172a;">${formattedName}</strong>`
-            : `<span style="font-weight: 600; color: #475569;">${formattedName}</span>`;
+            ? `<strong style="font-weight: 800; color: #09090B;">${formattedName}</strong>`
+            : `<span style="font-weight: 700; color: #64748B;">${formattedName}</span>`;
 
-          return `<th style="text-align: center; vertical-align: middle; padding: 10px 10px;">
+          return `<th style="text-align: center; vertical-align: middle; padding: 12px 10px;">
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
               <div>${nameHtml}</div>
               ${tags ? `<div style="margin-top: 5px; display: flex; gap: 4px; justify-content: center;">${tags}</div>` : ''}
@@ -2220,7 +2518,7 @@
           <tr>${d.headers.map(h => {
             const colLower = h.toLowerCase();
             const isPk = tblKeys.pk.includes(colLower);
-            const val = r[h] !== null ? r[h] : '<span style="color:#94a3b8;">NULL</span>';
+            const val = r[h] !== null ? r[h] : '<span style="color:#94A3B8;">NULL</span>';
             return isPk 
               ? `<td class="pk-cell"><strong>${val}</strong></td>`
               : `<td>${val}</td>`;
@@ -2238,20 +2536,20 @@
         const f = document.getElementById('telemetryFeed');
         if (!f) return;
         if (!logs.length) {
-          f.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No queries recorded in telemetry buffer yet.</div>';
+          f.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px;">No queries recorded in telemetry buffer yet.</div>';
           return;
         }
         f.innerHTML = logs.map(l => `
           <div class="log-item">
             <div class="log-header">
               <div style="display: flex; gap: 8px; align-items: center;">
-                <span class="pill-badge pill-blue">${l.type}</span>
-                <strong>${l.title}</strong>
+                <span class="pill-badge pill-dark">${l.type}</span>
+                <strong style="color: #09090B; font-weight: 800;">${l.title}</strong>
               </div>
-              <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">${l.timestamp} (${l.time_ms} ms)</span>
+              <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); font-weight: 600;">${l.timestamp} (${l.time_ms} ms)</span>
             </div>
             ${l.sql ? `<div class="vscode-box">${formatVsCodeSql(l.sql)}</div>` : ''}
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">${l.state_change}</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 8px; font-weight: 500;">${l.state_change}</div>
           </div>
         `).join('');
       } catch (e) {
@@ -2286,9 +2584,9 @@
         document.getElementById('qSql').innerHTML = formatVsCodeSql(d.sql);
         const qH = document.getElementById('qHeaders');
         const qB = document.getElementById('qBody');
-        qH.innerHTML = (d.headers || []).map(h => `<th style="text-align: center; vertical-align: middle; padding: 10px 10px;">${formatHeaderLabel(h)}</th>`).join('');
+        qH.innerHTML = (d.headers || []).map(h => `<th style="text-align: center; vertical-align: middle; padding: 12px 10px;">${formatHeaderLabel(h)}</th>`).join('');
         qB.innerHTML = (d.rows || []).map(r => `
-          <tr>${d.headers.map(h => `<td>${r[h] !== null ? r[h] : '<span style="color:#94a3b8;">NULL</span>'}</td>`).join('')}</tr>
+          <tr>${d.headers.map(h => `<td>${r[h] !== null ? r[h] : '<span style="color:#94A3B8;">NULL</span>'}</td>`).join('')}</tr>
         `).join('');
       } catch (e) {
         console.error(e);
@@ -2315,7 +2613,7 @@
         if (d.headers && d.headers.length) {
           rH.innerHTML = d.headers.map(h => `<th>${h}</th>`).join('');
           rB.innerHTML = (d.rows || []).map(r => `
-            <tr>${d.headers.map(h => `<td>${r[h] !== null ? r[h] : '<span style="color:#94a3b8;">NULL</span>'}</td>`).join('')}</tr>
+            <tr>${d.headers.map(h => `<td>${r[h] !== null ? r[h] : '<span style="color:#94A3B8;">NULL</span>'}</td>`).join('')}</tr>
           `).join('');
         } else {
           rH.innerHTML = '<th>Status</th><th>Rows Affected</th>';
@@ -2338,11 +2636,11 @@
         b.innerHTML = (d.records || []).map(r => `
           <tr>
             <td><span class="pill-badge pill-blue">${r.reg_no}</span></td>
-            <td>${r.first_name} ${r.last_name}</td>
+            <td style="font-weight: 700; color: #09090B;">${r.first_name} ${r.last_name}</td>
             <td>${r.dept_code}</td>
             <td>${r.avg_marks ? r.avg_marks.toFixed(1) : 'N/A'}</td>
-            <td><strong>${r.cgpa ? r.cgpa.toFixed(2) : 'N/A'}</strong></td>
-            <td><span class="pill-badge ${r.standing.includes('Dean') ? 'pill-blue' : r.standing.includes('First') ? 'pill-green' : 'pill-amber'}">${r.standing}</span></td>
+            <td><strong style="font-family: var(--font-heading); color: #09090B;">${r.cgpa ? r.cgpa.toFixed(2) : 'N/A'}</strong></td>
+            <td><span class="pill-badge ${r.standing.includes('Dean') ? 'pill-dark' : r.standing.includes('First') ? 'pill-green' : 'pill-amber'}">${r.standing}</span></td>
           </tr>
         `).join('');
         showToast('Audit cursor traversal completed');
@@ -2351,13 +2649,11 @@
       }
     }
 
-    // Initialize application on page load
     window.onload = function() {
-      syncNavSlider();
+      updateTogglePill();
       loadStats();
       loadMetadata();
     };
-    window.addEventListener('resize', syncNavSlider);
   </script>
 </body>
 </html>
